@@ -1,0 +1,54 @@
+import type { Metadata, Viewport } from 'next'
+import { Playfair_Display, Lora } from 'next/font/google'
+import './globals.css'
+import { ThemeProvider } from '@/components/ThemeProvider'
+import BottomNav from '@/components/BottomNav'
+
+const playfair = Playfair_Display({
+  subsets: ['latin'],
+  variable: '--font-playfair',
+  display: 'swap',
+})
+
+const lora = Lora({
+  subsets: ['latin'],
+  variable: '--font-lora',
+  display: 'swap',
+})
+
+export const metadata: Metadata = {
+  title: 'Upaninews',
+  description: 'Revista digital de consciencia, espiritualidad y cultura',
+}
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#F5EFE3' },
+    { media: '(prefers-color-scheme: dark)', color: '#0F0A05' },
+  ],
+}
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="es" className={`${playfair.variable} ${lora.variable}`}>
+      <head>
+        <style>{`
+          :root {
+            --font-display: var(--font-playfair), Georgia, serif;
+            --font-reading: var(--font-lora), Georgia, serif;
+            --font-ui: var(--font-lora), Georgia, serif;
+          }
+        `}</style>
+      </head>
+      <body>
+        <ThemeProvider>
+          {children}
+          <BottomNav />
+        </ThemeProvider>
+      </body>
+    </html>
+  )
+}
