@@ -14,12 +14,19 @@ export interface RssItem {
 }
 
 export async function fetchFeed(): Promise<RssItem[]> {
-  const res = await fetch('https://upaninews.com/feed/', {
-    next: { revalidate: 3600 },
-  })
-  if (!res.ok) throw new Error('Failed to fetch feed')
-  const xml = await res.text()
+  try {
+    const res = await fetch('https://upaninews.com/feed/', {
+      next: { revalidate: 3600 },
+      signal: AbortSignal.timeout(10000),
+    })
+    if (!res.ok) return []
+    return parseFeed(await res.text())
+  } catch {
+    return []
+  }
+}
 
+function parseFeed(xml: string): RssItem[] {
   const parser = new XMLParser({
     ignoreAttributes: false,
     attributeNamePrefix: '@_',
