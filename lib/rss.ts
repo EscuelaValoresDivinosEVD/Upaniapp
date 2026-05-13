@@ -17,11 +17,21 @@ export async function fetchFeed(): Promise<RssItem[]> {
   try {
     const res = await fetch('https://upaninews.com/feed/', {
       next: { revalidate: 3600 },
-      signal: AbortSignal.timeout(10000),
+      signal: AbortSignal.timeout(15000),
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1',
+        'Accept': 'application/rss+xml, application/xml, text/xml, */*',
+        'Accept-Language': 'es-ES,es;q=0.9',
+        'Cache-Control': 'no-cache',
+      },
     })
-    if (!res.ok) return []
+    if (!res.ok) {
+      console.error(`RSS fetch failed: ${res.status} ${res.statusText}`)
+      return []
+    }
     return parseFeed(await res.text())
-  } catch {
+  } catch (err) {
+    console.error('RSS fetch error:', err)
     return []
   }
 }
