@@ -2,6 +2,8 @@ import { fetchFeed } from '@/lib/rss'
 import ArticleCard from '@/components/ArticleCard'
 import ThemeToggleHeader from '@/components/ThemeToggleHeader'
 
+export const dynamic = 'force-dynamic'
+
 export default async function HomePage() {
   let items = await fetchFeed()
 

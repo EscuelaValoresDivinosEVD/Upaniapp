@@ -2,6 +2,8 @@ import { fetchFeed } from '@/lib/rss'
 import ReaderClient from '@/components/ReaderClient'
 import { notFound } from 'next/navigation'
 
+export const dynamic = 'force-dynamic'
+
 interface Props {
   params: Promise<{ slug: string }>
 }

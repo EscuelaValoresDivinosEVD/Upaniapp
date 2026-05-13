@@ -4,6 +4,8 @@ import ArticleCard from '@/components/ArticleCard'
 import ThemeToggleHeader from '@/components/ThemeToggleHeader'
 import Link from 'next/link'
 
+export const dynamic = 'force-dynamic'
+
 interface Props {
   params: Promise<{ slug: string }>
 }
