@@ -12,6 +12,7 @@ export default function BottomNav() {
   const [searchOpen, setSearchOpen] = useState(false)
 
   const isHome = pathname === '/'
+  const isSaved = pathname === '/saved'
 
   return (
     <>
@@ -96,6 +97,27 @@ export default function BottomNav() {
           <span>Categorías</span>
         </button>
 
+        {/* Guardados */}
+        <Link
+          href="/saved"
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '3px',
+            padding: '4px 16px',
+            color: isSaved ? 'var(--accent-warm)' : 'var(--text-muted)',
+            textDecoration: 'none',
+            fontSize: '11px',
+            fontFamily: 'var(--font-ui)',
+            letterSpacing: '0.05em',
+            transition: 'color 0.2s',
+          }}
+        >
+          <BookmarkIcon active={isSaved} />
+          <span>Guardados</span>
+        </Link>
+
         {/* Kiosko */}
         <a
           href="https://upaninews.com/tienda/"
@@ -150,6 +172,14 @@ function MenuIcon() {
       <line x1="3" y1="6" x2="21" y2="6" />
       <line x1="3" y1="12" x2="21" y2="12" />
       <line x1="3" y1="18" x2="21" y2="18" />
+    </svg>
+  )
+}
+
+function BookmarkIcon({ active }: { active: boolean }) {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill={active ? 'var(--accent-warm)' : 'none'} stroke="currentColor" strokeWidth={active ? 2.2 : 1.8} strokeLinecap="round" strokeLinejoin="round">
+      <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z" />
     </svg>
   )
 }

@@ -4,13 +4,16 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useTheme } from './ThemeProvider'
 import { formatDate } from '@/lib/rss'
+import SaveButton from './SaveButton'
 
 interface Props {
+  slug: string
   title: string
   pubDate: string
   categories: string[]
   content: string
   description: string
+  image?: string
   sourceUrl: string
 }
 
@@ -21,7 +24,7 @@ const FONT_SIZES = [
   { label: 'XL', value: '1.35rem', lineHeight: '2.0' },
 ]
 
-export default function ReaderClient({ title, pubDate, categories, content, description, sourceUrl }: Props) {
+export default function ReaderClient({ slug, title, pubDate, categories, content, description, image, sourceUrl }: Props) {
   const [fontIndex, setFontIndex] = useState(1)
   const [showControls, setShowControls] = useState(false)
   const { theme, toggle } = useTheme()
@@ -41,6 +44,8 @@ export default function ReaderClient({ title, pubDate, categories, content, desc
 
   const currentFont = FONT_SIZES[fontIndex]
   const bodyText = content || description
+
+  const articleData = { slug, title, pubDate, categories, content, description, image, link: sourceUrl, savedAt: 0 }
 
   return (
     <div style={{ minHeight: '100vh', background: 'var(--bg)' }}>
@@ -76,6 +81,9 @@ export default function ReaderClient({ title, pubDate, categories, content, desc
         </Link>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          {/* Save button */}
+          <SaveButton article={articleData} />
+
           {/* Font size control */}
           <div style={{ position: 'relative' }}>
             <button
