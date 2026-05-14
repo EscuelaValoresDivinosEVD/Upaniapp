@@ -1,26 +1,26 @@
 @import "tailwindcss";
 
 @theme {
-  /* Warm vintage palette */
-  --color-parchment: #F5EFE3;
-  --color-parchment-dark: #EDE5D5;
-  --color-parchment-darker: #E0D5BF;
-  --color-border: #C8B89A;
-  --color-ink: #2D1F0E;
-  --color-ink-soft: #5C3D20;
-  --color-ink-muted: #8B6540;
+  /* Purple vintage palette */
+  --color-parchment: #F0EAF8;
+  --color-parchment-dark: #E6DCF2;
+  --color-parchment-darker: #D9CCEA;
+  --color-border: #C4AED8;
+  --color-ink: #1A0B2E;
+  --color-ink-soft: #4A2D6B;
+  --color-ink-muted: #7B5A9A;
   --color-rust: #5C2585;
   --color-amber: #8A4EC8;
   --color-amber-light: #B07FD8;
 
   /* Dark mode (night) */
-  --color-night: #0F0A05;
-  --color-night-surface: #1C1308;
-  --color-night-card: #261A0C;
-  --color-night-border: #3D2E18;
-  --color-night-text: #F0E8D8;
-  --color-night-soft: #C4A882;
-  --color-night-muted: #7A6045;
+  --color-night: #0D0812;
+  --color-night-surface: #170E22;
+  --color-night-card: #1F1430;
+  --color-night-border: #352054;
+  --color-night-text: #F0E8FA;
+  --color-night-soft: #C4A8E0;
+  --color-night-muted: #7A5A9A;
   --color-night-accent: #B07FD8;
 
   /* Typography */
@@ -30,26 +30,26 @@
 }
 
 :root {
-  --bg: #F5EFE3;
-  --surface: #EDE5D5;
-  --card: #EDE5D5;
-  --border: #C8B89A;
-  --text: #2D1F0E;
-  --text-soft: #5C3D20;
-  --text-muted: #8B6540;
+  --bg: #F0EAF8;
+  --surface: #E6DCF2;
+  --card: #E6DCF2;
+  --border: #C4AED8;
+  --text: #1A0B2E;
+  --text-soft: #4A2D6B;
+  --text-muted: #7B5A9A;
   --accent: #5C2585;
   --accent-warm: #8A4EC8;
   color-scheme: light;
 }
 
 .dark {
-  --bg: #0F0A05;
-  --surface: #1C1308;
-  --card: #261A0C;
-  --border: #3D2E18;
-  --text: #F0E8D8;
-  --text-soft: #C4A882;
-  --text-muted: #7A6045;
+  --bg: #0D0812;
+  --surface: #170E22;
+  --card: #1F1430;
+  --border: #352054;
+  --text: #F0E8FA;
+  --text-soft: #C4A8E0;
+  --text-muted: #7A5A9A;
   --accent: #B07FD8;
   --accent-warm: #CE9EF0;
   color-scheme: dark;
