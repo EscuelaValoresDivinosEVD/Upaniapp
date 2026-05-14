@@ -37,11 +37,13 @@ export default function ArticleLoader({ slug }: { slug: string }) {
 
   return (
     <ReaderClient
+      slug={item.slug}
       title={item.title}
       pubDate={item.pubDate}
       categories={item.categories}
       content={item.content}
       description={item.description}
+      image={item.image}
       sourceUrl={item.link}
     />
   )
