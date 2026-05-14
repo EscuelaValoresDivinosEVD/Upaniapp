@@ -1,5 +1,5 @@
 import webpush from 'web-push'
-import { redis } from '@/lib/redis'
+import { getRedis } from '@/lib/redis'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -28,11 +28,11 @@ export async function GET(req: Request) {
     const [post] = await res.json()
     if (!post) return Response.json({ ok: false, error: 'no_posts' })
 
-    const lastId = await redis.get<number>(LAST_ID_KEY)
+    const lastId = await getRedis().get<number>(LAST_ID_KEY)
     if (lastId === post.id) return Response.json({ ok: true, skipped: true })
 
-    const subs = await redis.smembers<string[]>(SUBS_KEY)
-    await redis.set(LAST_ID_KEY, post.id)
+    const subs = await getRedis().smembers<string[]>(SUBS_KEY)
+    await getRedis().set(LAST_ID_KEY, post.id)
 
     if (!subs || subs.length === 0) return Response.json({ ok: true, sent: 0 })
 
@@ -50,7 +50,7 @@ export async function GET(req: Request) {
       .map((r, i) => (r.status === 'rejected' ? subs[i] : null))
       .filter((s): s is string => s !== null)
     if (expired.length) {
-      await Promise.all(expired.map((s) => redis.srem(SUBS_KEY, s)))
+      await Promise.all(expired.map((s) => getRedis().srem(SUBS_KEY, s)))
     }
 
     const sent = results.filter((r) => r.status === 'fulfilled').length
