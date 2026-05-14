@@ -5,6 +5,7 @@ import { ThemeProvider } from '@/components/ThemeProvider'
 import BottomNav from '@/components/BottomNav'
 import ServiceWorkerSetup from '@/components/ServiceWorkerSetup'
 import InstallPrompt from '@/components/InstallPrompt'
+import SplashScreen from '@/components/SplashScreen'
 
 const playfair = Playfair_Display({
   subsets: ['latin'],
@@ -65,6 +66,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body>
         <ThemeProvider>
+          <SplashScreen />
           <ServiceWorkerSetup />
           {children}
           <BottomNav />
