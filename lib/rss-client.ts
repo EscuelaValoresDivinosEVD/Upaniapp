@@ -4,27 +4,83 @@ import { formatDate } from './rss'
 export type { RssItem }
 export { formatDate }
 
-let cached: { items: RssItem[]; ts: number } | null = null
 const TTL = 3600 * 1000
+const WP_API = 'https://upaninews.com/wp-json/wp/v2'
 
-const WP_API = 'https://upaninews.com/wp-json/wp/v2/posts'
+// Cache for the home feed (latest 100 posts)
+let homeCached: { items: RssItem[]; ts: number } | null = null
+
+// Cache per category slug
+const categoryCached = new Map<string, { items: RssItem[]; ts: number }>()
 
 export async function fetchFeedClient(): Promise<RssItem[]> {
-  if (cached && Date.now() - cached.ts < TTL) return cached.items
+  if (homeCached && Date.now() - homeCached.ts < TTL) return homeCached.items
 
   try {
     const res = await fetch(
-      `${WP_API}?per_page=100&_embed=true&orderby=date&order=desc`,
+      `${WP_API}/posts?per_page=100&_embed=true&orderby=date&order=desc`,
       { headers: { Accept: 'application/json' } }
     )
     if (!res.ok) return []
     const posts: WpPost[] = await res.json()
     const items = posts.map(mapWpPost)
-    cached = { items, ts: Date.now() }
+    homeCached = { items, ts: Date.now() }
     return items
   } catch {
     return []
   }
+}
+
+export async function fetchFeedByCategory(categorySlug: string): Promise<RssItem[]> {
+  const hit = categoryCached.get(categorySlug)
+  if (hit && Date.now() - hit.ts < TTL) return hit.items
+
+  try {
+    // Step 1: resolve category slug → WP term ID
+    const catRes = await fetch(
+      `${WP_API}/categories?slug=${encodeURIComponent(categorySlug)}&per_page=1`,
+      { headers: { Accept: 'application/json' } }
+    )
+    if (!catRes.ok) return []
+    const cats: WpTerm[] = await catRes.json()
+
+    // Also try tags if not found as a category
+    let termId: number | null = cats[0]?.id ?? null
+    let termType: 'categories' | 'tags' = 'categories'
+
+    if (!termId) {
+      const tagRes = await fetch(
+        `${WP_API}/tags?slug=${encodeURIComponent(categorySlug)}&per_page=1`,
+        { headers: { Accept: 'application/json' } }
+      )
+      if (tagRes.ok) {
+        const tags: WpTerm[] = await tagRes.json()
+        termId = tags[0]?.id ?? null
+        termType = 'tags'
+      }
+    }
+
+    if (!termId) return []
+
+    // Step 2: fetch posts filtered by that term ID
+    const postsRes = await fetch(
+      `${WP_API}/posts?${termType}=${termId}&per_page=100&_embed=true&orderby=date&order=desc`,
+      { headers: { Accept: 'application/json' } }
+    )
+    if (!postsRes.ok) return []
+    const posts: WpPost[] = await postsRes.json()
+    const items = posts.map(mapWpPost)
+    categoryCached.set(categorySlug, { items, ts: Date.now() })
+    return items
+  } catch {
+    return []
+  }
+}
+
+interface WpTerm {
+  id: number
+  name: string
+  slug: string
 }
 
 interface WpPost {
