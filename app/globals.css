@@ -1,27 +1,27 @@
 @import "tailwindcss";
 
 @theme {
-  /* Purple vintage palette */
-  --color-parchment: #F0EAF8;
-  --color-parchment-dark: #E6DCF2;
-  --color-parchment-darker: #D9CCEA;
-  --color-border: #C4AED8;
-  --color-ink: #1A0B2E;
-  --color-ink-soft: #4A2D6B;
-  --color-ink-muted: #7B5A9A;
-  --color-rust: #5C2585;
-  --color-amber: #8A4EC8;
-  --color-amber-light: #B07FD8;
+  /* Purple palette — base #561e57 */
+  --color-parchment: #F3EAF3;
+  --color-parchment-dark: #EAD6EA;
+  --color-parchment-darker: #DFCADF;
+  --color-border: #C49AC4;
+  --color-ink: #1A071B;
+  --color-ink-soft: #3C1440;
+  --color-ink-muted: #7A4A7C;
+  --color-rust: #561e57;
+  --color-amber: #7B2D7C;
+  --color-amber-light: #A560A6;
 
   /* Dark mode (night) */
-  --color-night: #0D0812;
-  --color-night-surface: #170E22;
-  --color-night-card: #1F1430;
-  --color-night-border: #352054;
-  --color-night-text: #F0E8FA;
-  --color-night-soft: #C4A8E0;
-  --color-night-muted: #7A5A9A;
-  --color-night-accent: #B07FD8;
+  --color-night: #0D040E;
+  --color-night-surface: #1A0C1B;
+  --color-night-card: #221322;
+  --color-night-border: #3C1C3D;
+  --color-night-text: #F0E8F0;
+  --color-night-soft: #C4A0C4;
+  --color-night-muted: #7A4A7C;
+  --color-night-accent: #C070C1;
 
   /* Typography */
   --font-display: 'Playfair Display', Georgia, serif;
@@ -30,29 +30,29 @@
 }
 
 :root {
-  --bg: #F0EAF8;
-  --surface: #E6DCF2;
-  --card: #E6DCF2;
-  --border: #C4AED8;
-  --text: #1A0B2E;
-  --text-soft: #4A2D6B;
-  --text-muted: #7B5A9A;
-  --accent: #5C2585;
-  --accent-warm: #8A4EC8;
+  --bg: #F3EAF3;
+  --surface: #EAD6EA;
+  --card: #EAD6EA;
+  --border: #C49AC4;
+  --text: #1A071B;
+  --text-soft: #3C1440;
+  --text-muted: #7A4A7C;
+  --accent: #561e57;
+  --accent-warm: #7B2D7C;
   --orange: #C4622D;
   color-scheme: light;
 }
 
 .dark {
-  --bg: #0D0812;
-  --surface: #170E22;
-  --card: #1F1430;
-  --border: #352054;
-  --text: #F0E8FA;
-  --text-soft: #C4A8E0;
-  --text-muted: #7A5A9A;
-  --accent: #B07FD8;
-  --accent-warm: #CE9EF0;
+  --bg: #0D040E;
+  --surface: #1A0C1B;
+  --card: #221322;
+  --border: #3C1C3D;
+  --text: #F0E8F0;
+  --text-soft: #C4A0C4;
+  --text-muted: #7A4A7C;
+  --accent: #9E509F;
+  --accent-warm: #C070C1;
   --orange: #E8895A;
   color-scheme: dark;
 }
