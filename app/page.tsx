@@ -1,5 +1,4 @@
 import ThemeToggleHeader from '@/components/ThemeToggleHeader'
-import PushNotificationToggle from '@/components/PushNotificationToggle'
 import FeedList from '@/components/FeedList'
 
 export const dynamic = 'force-dynamic'
@@ -41,10 +40,7 @@ export default function HomePage() {
             Consciencia & Cultura
           </p>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <PushNotificationToggle />
-          <ThemeToggleHeader />
-        </div>
+        <ThemeToggleHeader />
       </header>
 
       <div style={{

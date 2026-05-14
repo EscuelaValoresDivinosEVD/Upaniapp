@@ -34,7 +34,7 @@ export default function SplashScreen() {
         position: 'fixed',
         inset: 0,
         zIndex: 9999,
-        background: '#0D040E',
+        background: '#561e57',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',

@@ -13,133 +13,58 @@ export default function BottomNav() {
 
   const isHome = pathname === '/'
   const isSaved = pathname === '/saved'
+  const isSettings = pathname === '/settings'
+
+  const itemStyle = (active: boolean) => ({
+    display: 'flex' as const,
+    flexDirection: 'column' as const,
+    alignItems: 'center' as const,
+    gap: '3px',
+    padding: '4px 12px',
+    color: active ? 'var(--accent-warm)' : 'var(--text-muted)',
+    textDecoration: 'none',
+    fontSize: '11px',
+    fontFamily: 'var(--font-ui)',
+    letterSpacing: '0.05em',
+    transition: 'color 0.2s',
+    background: 'none',
+    border: 'none',
+    cursor: 'pointer',
+  })
 
   return (
     <>
-      <nav
-        style={{
-          position: 'fixed',
-          bottom: 0,
-          left: 0,
-          right: 0,
-          zIndex: 50,
-          background: 'var(--surface)',
-          borderTop: '1px solid var(--border)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-around',
-          paddingTop: '10px',
-          paddingBottom: 'max(env(safe-area-inset-bottom), 20px)',
-        }}
-      >
-        {/* Home */}
-        <Link
-          href="/"
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: '3px',
-            padding: '4px 16px',
-            color: isHome ? 'var(--accent-warm)' : 'var(--text-muted)',
-            textDecoration: 'none',
-            fontSize: '11px',
-            fontFamily: 'var(--font-ui)',
-            letterSpacing: '0.05em',
-            transition: 'color 0.2s',
-          }}
-        >
+      <nav style={{
+        position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 50,
+        background: 'var(--surface)', borderTop: '1px solid var(--border)',
+        display: 'flex', alignItems: 'center', justifyContent: 'space-around',
+        paddingTop: '10px',
+        paddingBottom: 'max(env(safe-area-inset-bottom), 20px)',
+      }}>
+        <Link href="/" style={itemStyle(isHome)}>
           <HomeIcon active={isHome} />
           <span>Inicio</span>
         </Link>
 
-        {/* Buscar */}
-        <button
-          onClick={() => setSearchOpen(true)}
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: '3px',
-            padding: '4px 16px',
-            background: 'none',
-            border: 'none',
-            cursor: 'pointer',
-            color: 'var(--text-muted)',
-            fontSize: '11px',
-            fontFamily: 'var(--font-ui)',
-            letterSpacing: '0.05em',
-          }}
-        >
+        <button onClick={() => setSearchOpen(true)} style={itemStyle(false)}>
           <SearchIcon />
           <span>Buscar</span>
         </button>
 
-        {/* Categorías */}
-        <button
-          onClick={() => setDrawerOpen(true)}
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: '3px',
-            padding: '4px 16px',
-            background: 'none',
-            border: 'none',
-            cursor: 'pointer',
-            color: 'var(--text-muted)',
-            fontSize: '11px',
-            fontFamily: 'var(--font-ui)',
-            letterSpacing: '0.05em',
-          }}
-        >
+        <button onClick={() => setDrawerOpen(true)} style={itemStyle(false)}>
           <MenuIcon />
           <span>Categorías</span>
         </button>
 
-        {/* Guardados */}
-        <Link
-          href="/saved"
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: '3px',
-            padding: '4px 16px',
-            color: isSaved ? 'var(--accent-warm)' : 'var(--text-muted)',
-            textDecoration: 'none',
-            fontSize: '11px',
-            fontFamily: 'var(--font-ui)',
-            letterSpacing: '0.05em',
-            transition: 'color 0.2s',
-          }}
-        >
+        <Link href="/saved" style={itemStyle(isSaved)}>
           <BookmarkIcon active={isSaved} />
           <span>Guardados</span>
         </Link>
 
-        {/* Kiosko */}
-        <a
-          href="https://upaninews.com/tienda/"
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: '3px',
-            padding: '4px 16px',
-            color: 'var(--text-muted)',
-            textDecoration: 'none',
-            fontSize: '11px',
-            fontFamily: 'var(--font-ui)',
-            letterSpacing: '0.05em',
-            transition: 'color 0.2s',
-          }}
-        >
-          <KioskoIcon />
-          <span>Kiosko</span>
-        </a>
+        <Link href="/settings" style={itemStyle(isSettings)}>
+          <SettingsIcon active={isSettings} />
+          <span>Ajustes</span>
+        </Link>
       </nav>
 
       <CategoryDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
@@ -184,18 +109,23 @@ function BookmarkIcon({ active }: { active: boolean }) {
   )
 }
 
+function SettingsIcon({ active }: { active: boolean }) {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={active ? 2.2 : 1.8} strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="3" />
+      <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z" />
+    </svg>
+  )
+}
+
 function KioskoIcon() {
   return (
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-      {/* Roof / awning */}
       <path d="M2 8h20" />
       <path d="M4 8V6a1 1 0 011-1h14a1 1 0 011 1v2" />
-      {/* Stand body */}
       <rect x="5" y="8" width="14" height="10" rx="1" />
-      {/* Newspapers on display */}
       <line x1="8" y1="12" x2="16" y2="12" />
       <line x1="8" y1="14.5" x2="16" y2="14.5" />
-      {/* Legs */}
       <line x1="7" y1="18" x2="7" y2="21" />
       <line x1="17" y1="18" x2="17" y2="21" />
       <line x1="5" y1="21" x2="19" y2="21" />
