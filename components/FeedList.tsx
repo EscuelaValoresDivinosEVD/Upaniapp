@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import Link from 'next/link'
 import { fetchFeedClient, fetchFeedByCategory, type RssItem } from '@/lib/rss-client'
 import ArticleCard from './ArticleCard'
@@ -14,17 +14,25 @@ export default function FeedList({ categorySlug }: Props) {
   const [loading, setLoading] = useState(true)
   const [offline, setOffline] = useState(false)
 
-  useEffect(() => {
-    setLoading(true)
-    const fetcher = categorySlug
-      ? fetchFeedByCategory(categorySlug)
-      : fetchFeedClient()
+  const loadFeed = useCallback((silent = false) => {
+    if (!silent) setLoading(true)
+    const fetcher = categorySlug ? fetchFeedByCategory(categorySlug) : fetchFeedClient()
     fetcher.then((result) => {
       setOffline(result.length === 0 && !navigator.onLine)
       setItems(result)
-      setLoading(false)
+      if (!silent) setLoading(false)
     })
   }, [categorySlug])
+
+  useEffect(() => {
+    loadFeed()
+
+    const onVisible = () => {
+      if (!document.hidden) loadFeed(true)
+    }
+    document.addEventListener('visibilitychange', onVisible)
+    return () => document.removeEventListener('visibilitychange', onVisible)
+  }, [loadFeed])
 
   if (loading) {
     return (
