@@ -9,9 +9,9 @@
   --color-ink: #2D1F0E;
   --color-ink-soft: #5C3D20;
   --color-ink-muted: #8B6540;
-  --color-rust: #8B4513;
-  --color-amber: #B5742A;
-  --color-amber-light: #D4956A;
+  --color-rust: #5C2585;
+  --color-amber: #8A4EC8;
+  --color-amber-light: #B07FD8;
 
   /* Dark mode (night) */
   --color-night: #0F0A05;
@@ -21,7 +21,7 @@
   --color-night-text: #F0E8D8;
   --color-night-soft: #C4A882;
   --color-night-muted: #7A6045;
-  --color-night-accent: #C17B3F;
+  --color-night-accent: #B07FD8;
 
   /* Typography */
   --font-display: 'Playfair Display', Georgia, serif;
@@ -37,8 +37,8 @@
   --text: #2D1F0E;
   --text-soft: #5C3D20;
   --text-muted: #8B6540;
-  --accent: #8B4513;
-  --accent-warm: #B5742A;
+  --accent: #5C2585;
+  --accent-warm: #8A4EC8;
   color-scheme: light;
 }
 
@@ -50,8 +50,8 @@
   --text: #F0E8D8;
   --text-soft: #C4A882;
   --text-muted: #7A6045;
-  --accent: #C17B3F;
-  --accent-warm: #D4956A;
+  --accent: #B07FD8;
+  --accent-warm: #CE9EF0;
   color-scheme: dark;
 }
 
