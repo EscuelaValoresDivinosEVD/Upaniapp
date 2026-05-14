@@ -13,11 +13,21 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setTheme] = useState<Theme>('light')
 
   useEffect(() => {
+    const mq = window.matchMedia('(prefers-color-scheme: dark)')
     const stored = localStorage.getItem('upani-theme') as Theme | null
-    const preferred = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
-    const initial = stored ?? preferred
+    const initial = stored ?? (mq.matches ? 'dark' : 'light')
     setTheme(initial)
     document.documentElement.classList.toggle('dark', initial === 'dark')
+
+    // Follow OS changes unless the user has set a manual preference
+    const onOsChange = (e: MediaQueryListEvent) => {
+      if (localStorage.getItem('upani-theme')) return
+      const next: Theme = e.matches ? 'dark' : 'light'
+      setTheme(next)
+      document.documentElement.classList.toggle('dark', next === 'dark')
+    }
+    mq.addEventListener('change', onOsChange)
+    return () => mq.removeEventListener('change', onOsChange)
   }, [])
 
   const toggle = () => {

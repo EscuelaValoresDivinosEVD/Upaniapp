@@ -143,7 +143,7 @@ export default function SettingsPage() {
                   Modo oscuro
                 </p>
                 <p style={{ margin: '3px 0 0', fontFamily: 'var(--font-ui)', fontSize: '0.78rem', color: 'var(--text-muted)' }}>
-                  {theme === 'dark' ? 'Activado' : 'Desactivado'}
+                  {theme === 'dark' ? 'Activado' : 'Desactivado'} · se adapta automáticamente al sistema
                 </p>
               </div>
               <button
