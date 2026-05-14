@@ -1,13 +1,17 @@
-const SHELL = 'upani-shell-v3'
-const STATIC = 'upani-static-v3'
+const SHELL = 'upani-shell-v4'
+const STATIC = 'upani-static-v4'
 const IMAGES = 'upani-images-v1'
 
-// Pre-cache app shell pages on install
+const OFFLINE_HTML = `<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Upaninews</title><style>body{margin:0;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#0D0812;color:#F0E8FA;font-family:Georgia,serif;text-align:center;padding:24px}h1{font-size:1.4rem;margin-bottom:12px}p{font-size:.9rem;color:#7A5A9A;margin-bottom:28px}a{display:inline-block;padding:11px 28px;background:#CE9EF0;color:#0D0812;border-radius:8px;text-decoration:none;font-weight:700}</style></head><body><h1>Sin conexión</h1><p>Revisa tu internet e intenta de nuevo.</p><a href="/">Reintentar</a></body></html>`
+
+// Pre-cache app shell on install — skipWaiting first so SW activates even if offline
 self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(SHELL).then((c) => c.addAll(['/', '/saved']))
-  )
   self.skipWaiting()
+  event.waitUntil(
+    caches.open(SHELL)
+      .then((c) => c.addAll(['/', '/saved']))
+      .catch(() => {}) // don't fail install if network unavailable
+  )
 })
 
 // Remove old caches and take control immediately
@@ -65,7 +69,11 @@ self.addEventListener('fetch', (event) => {
           return res
         })
         .catch(() =>
-          caches.match(request).then((cached) => cached ?? caches.match('/'))
+          caches.match(request)
+            .then((cached) => cached ?? caches.match('/'))
+            .then((cached) => cached ?? new Response(OFFLINE_HTML, {
+              headers: { 'Content-Type': 'text/html; charset=utf-8' },
+            }))
         )
     )
     return
