@@ -98,9 +98,8 @@ export default function InstallPrompt() {
             alignItems: 'center',
             justifyContent: 'center',
             flexShrink: 0,
-            fontSize: '1.6rem',
           }}>
-            ❦
+            <AddToHomeIcon />
           </div>
           <div>
             <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.1rem', fontWeight: '700', color: 'var(--text)', margin: 0 }}>
@@ -116,41 +115,52 @@ export default function InstallPrompt() {
 
         {mode === 'native' ? (
           /* Android / Chrome — direct install */
-          <div style={{ display: 'flex', gap: '10px' }}>
-            <button
-              onClick={dismiss}
-              style={{
-                flex: 1,
-                padding: '12px',
-                border: '1px solid var(--border)',
-                borderRadius: '10px',
-                background: 'none',
-                color: 'var(--text-muted)',
-                fontFamily: 'var(--font-ui)',
-                fontSize: '0.9rem',
-                cursor: 'pointer',
-              }}
-            >
-              Ahora no
-            </button>
-            <button
-              onClick={install}
-              style={{
-                flex: 2,
-                padding: '12px',
-                border: 'none',
-                borderRadius: '10px',
-                background: 'var(--accent-warm)',
-                color: '#fff',
-                fontFamily: 'var(--font-display)',
-                fontSize: '0.95rem',
-                fontWeight: '600',
-                cursor: 'pointer',
-                letterSpacing: '0.02em',
-              }}
-            >
-              Instalar app
-            </button>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            <p style={{
+              fontFamily: 'var(--font-ui)',
+              fontSize: '0.84rem',
+              color: 'var(--text-soft)',
+              margin: 0,
+              lineHeight: '1.5',
+            }}>
+              Una vez instalada, activa las <span style={{ color: 'var(--orange)', fontWeight: '600' }}>notificaciones</span> para recibir los nuevos artículos de Upaninews.
+            </p>
+            <div style={{ display: 'flex', gap: '10px' }}>
+              <button
+                onClick={dismiss}
+                style={{
+                  flex: 1,
+                  padding: '12px',
+                  border: '1px solid var(--border)',
+                  borderRadius: '10px',
+                  background: 'none',
+                  color: 'var(--text-muted)',
+                  fontFamily: 'var(--font-ui)',
+                  fontSize: '0.9rem',
+                  cursor: 'pointer',
+                }}
+              >
+                Ahora no
+              </button>
+              <button
+                onClick={install}
+                style={{
+                  flex: 2,
+                  padding: '12px',
+                  border: 'none',
+                  borderRadius: '10px',
+                  background: 'var(--accent-warm)',
+                  color: '#fff',
+                  fontFamily: 'var(--font-display)',
+                  fontSize: '0.95rem',
+                  fontWeight: '600',
+                  cursor: 'pointer',
+                  letterSpacing: '0.02em',
+                }}
+              >
+                Instalar app
+              </button>
+            </div>
           </div>
         ) : (
           /* iOS Safari — manual steps */
@@ -160,6 +170,7 @@ export default function InstallPrompt() {
                 { n: '1', text: 'Toca el botón Compartir', icon: <ShareIcon /> },
                 { n: '2', text: 'Elige "Añadir a pantalla de inicio"', icon: <AddIcon /> },
                 { n: '3', text: 'Toca "Añadir" en la esquina superior derecha', icon: <CheckIcon /> },
+                { n: '4', text: 'Activa las notificaciones para recibir nuevos artículos', icon: <BellIcon /> },
               ].map(({ n, text, icon }) => (
                 <div key={n} style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
                   <div style={{
@@ -212,6 +223,17 @@ export default function InstallPrompt() {
   )
 }
 
+function AddToHomeIcon() {
+  return (
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="5" y="2" width="14" height="20" rx="2" />
+      <line x1="12" y1="8" x2="12" y2="14" />
+      <line x1="9" y1="11" x2="15" y2="11" />
+      <line x1="9" y1="17" x2="15" y2="17" />
+    </svg>
+  )
+}
+
 function ShareIcon() {
   return (
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -236,6 +258,15 @@ function CheckIcon() {
   return (
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <polyline points="20 6 9 17 4 12" />
+    </svg>
+  )
+}
+
+function BellIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9" />
+      <path d="M13.73 21a2 2 0 01-3.46 0" />
     </svg>
   )
 }
