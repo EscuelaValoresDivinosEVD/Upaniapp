@@ -22,7 +22,7 @@ export default function BottomNav() {
     gap: '4px',
     padding: '2px 0',
     minWidth: '48px',
-    color: active ? 'var(--accent-warm)' : 'var(--text-muted)',
+    color: active ? 'var(--accent-warm)' : 'rgba(232,137,90,0.5)',
     textDecoration: 'none',
     fontSize: '10px',
     fontFamily: 'var(--font-ui)',
