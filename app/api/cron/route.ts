@@ -31,7 +31,7 @@ export async function GET(req: Request) {
     const lastId = await getRedis().get<number>(LAST_ID_KEY)
     if (lastId === post.id) return Response.json({ ok: true, skipped: true })
 
-    const subs = await getRedis().smembers<string[]>(SUBS_KEY)
+    const subs = await getRedis().smembers(SUBS_KEY)
     await getRedis().set(LAST_ID_KEY, post.id)
 
     if (!subs || subs.length === 0) return Response.json({ ok: true, sent: 0 })
@@ -42,13 +42,13 @@ export async function GET(req: Request) {
     const payload = JSON.stringify({ title, body, url })
 
     const results = await Promise.allSettled(
-      subs.map((sub) => webpush.sendNotification(JSON.parse(sub), payload))
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      subs.map((sub) => webpush.sendNotification(sub as any, payload))
     )
 
-    // Remove expired/invalid subscriptions
     const expired = results
       .map((r, i) => (r.status === 'rejected' ? subs[i] : null))
-      .filter((s): s is string => s !== null)
+      .filter((s) => s !== null)
     if (expired.length) {
       await Promise.all(expired.map((s) => getRedis().srem(SUBS_KEY, s)))
     }
