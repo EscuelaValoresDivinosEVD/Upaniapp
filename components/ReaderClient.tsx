@@ -452,14 +452,34 @@ export default function ReaderClient({ slug, title, pubDate, categories, content
               <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.9rem' }}>Traduciendo...</span>
             </div>
           ) : translated ? (
-            <div
-              className="prose-vintage"
-              style={{ fontSize: currentFont.value, lineHeight: currentFont.lineHeight }}
-            >
-              {translated.split('\n\n').map((para, i) =>
-                para.trim() ? <p key={i} style={{ marginBottom: '1.2em' }}>{para.trim()}</p> : null
-              )}
-            </div>
+            <>
+              <div style={{
+                display: 'flex',
+                alignItems: 'flex-start',
+                gap: '8px',
+                padding: '10px 14px',
+                marginBottom: '24px',
+                background: 'rgba(232,137,90,0.08)',
+                border: '1px solid rgba(232,137,90,0.25)',
+                borderRadius: '8px',
+                fontSize: '0.75rem',
+                color: 'var(--text-muted)',
+                fontFamily: 'var(--font-ui)',
+                fontStyle: 'italic',
+                lineHeight: '1.5',
+              }}>
+                <span style={{ color: 'var(--accent-warm)', fontStyle: 'normal', fontWeight: '700', flexShrink: 0 }}>✦</span>
+                <span>Traducido con inteligencia artificial. El texto puede contener imprecisiones.</span>
+              </div>
+              <div
+                className="prose-vintage"
+                style={{ fontSize: currentFont.value, lineHeight: currentFont.lineHeight }}
+              >
+                {translated.split('\n\n').map((para, i) =>
+                  para.trim() ? <p key={i} style={{ marginBottom: '1.2em' }}>{para.trim()}</p> : null
+                )}
+              </div>
+            </>
           ) : (
             <div
               className="prose-vintage"

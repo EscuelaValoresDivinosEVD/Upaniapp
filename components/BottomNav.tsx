@@ -51,7 +51,7 @@ export default function BottomNav() {
           <span>Buscar</span>
         </button>
 
-        <a href="https://upaninews.com/kiosko" target="_blank" rel="noopener noreferrer" style={itemStyle(false)}>
+        <a href="https://upaninews.com/tienda" target="_blank" rel="noopener noreferrer" style={itemStyle(false)}>
           <KioskoIcon />
           <span>Kiosko</span>
         </a>
