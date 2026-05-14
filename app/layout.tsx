@@ -4,6 +4,7 @@ import './globals.css'
 import { ThemeProvider } from '@/components/ThemeProvider'
 import BottomNav from '@/components/BottomNav'
 import ServiceWorkerSetup from '@/components/ServiceWorkerSetup'
+import InstallPrompt from '@/components/InstallPrompt'
 
 const playfair = Playfair_Display({
   subsets: ['latin'],
@@ -50,6 +51,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <ServiceWorkerSetup />
           {children}
           <BottomNav />
+          <InstallPrompt />
         </ThemeProvider>
       </body>
     </html>
