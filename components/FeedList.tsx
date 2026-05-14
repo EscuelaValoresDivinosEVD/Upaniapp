@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import Link from 'next/link'
 import { fetchFeedClient, fetchFeedByCategory, type RssItem } from '@/lib/rss-client'
 import ArticleCard from './ArticleCard'
 
@@ -11,6 +12,7 @@ interface Props {
 export default function FeedList({ categorySlug }: Props) {
   const [items, setItems] = useState<RssItem[]>([])
   const [loading, setLoading] = useState(true)
+  const [offline, setOffline] = useState(false)
 
   useEffect(() => {
     setLoading(true)
@@ -18,6 +20,7 @@ export default function FeedList({ categorySlug }: Props) {
       ? fetchFeedByCategory(categorySlug)
       : fetchFeedClient()
     fetcher.then((result) => {
+      setOffline(result.length === 0 && !navigator.onLine)
       setItems(result)
       setLoading(false)
     })
@@ -46,10 +49,57 @@ export default function FeedList({ categorySlug }: Props) {
 
   if (!loading && items.length === 0) {
     return (
-      <div style={{ textAlign: 'center', padding: '60px 20px', color: 'var(--text-muted)' }}>
-        <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.1rem' }}>
-          No hay entradas disponibles.
-        </p>
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '80px 24px',
+        gap: '16px',
+        textAlign: 'center',
+      }}>
+        {offline ? (
+          <>
+            <div style={{ color: 'var(--border)', marginBottom: '4px' }}>
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="1" y1="1" x2="23" y2="23" />
+                <path d="M16.72 11.06A10.94 10.94 0 0119 12.55" />
+                <path d="M5 12.55a10.94 10.94 0 015.17-2.39" />
+                <path d="M10.71 5.05A16 16 0 0122.56 9" />
+                <path d="M1.42 9a15.91 15.91 0 014.7-2.88" />
+                <path d="M8.53 16.11a6 6 0 016.95 0" />
+                <circle cx="12" cy="20" r="1" fill="currentColor" />
+              </svg>
+            </div>
+            <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.3rem', fontWeight: '700', color: 'var(--text)', margin: 0 }}>
+              Modo offline
+            </p>
+            <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.85rem', color: 'var(--text-muted)', margin: 0, maxWidth: '240px', lineHeight: '1.5' }}>
+              Sin conexión a internet. Puedes leer los artículos que guardaste.
+            </p>
+            <Link
+              href="/saved"
+              style={{
+                marginTop: '8px',
+                padding: '11px 28px',
+                background: 'var(--accent-warm)',
+                color: '#fff',
+                borderRadius: '8px',
+                textDecoration: 'none',
+                fontFamily: 'var(--font-display)',
+                fontSize: '0.95rem',
+                fontWeight: '600',
+                letterSpacing: '0.02em',
+              }}
+            >
+              Ver guardados
+            </Link>
+          </>
+        ) : (
+          <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.1rem', color: 'var(--text-muted)' }}>
+            No hay entradas disponibles.
+          </p>
+        )}
       </div>
     )
   }
