@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { fetchFeedClient, type RssItem } from '@/lib/rss-client'
+import { getSaved } from '@/lib/saved'
 import ReaderClient from './ReaderClient'
 
 export default function ArticleLoader({ slug }: { slug: string }) {
@@ -10,7 +11,12 @@ export default function ArticleLoader({ slug }: { slug: string }) {
 
   useEffect(() => {
     fetchFeedClient().then((items) => {
-      setItem(items.find((i) => i.slug === slug) ?? null)
+      let found: RssItem | null = items.find((i) => i.slug === slug) ?? null
+      if (!found) {
+        const saved = getSaved().find((a) => a.slug === slug)
+        if (saved) found = { ...saved, guid: saved.slug, creator: '' }
+      }
+      setItem(found)
       setLoading(false)
     })
   }, [slug])
