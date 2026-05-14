@@ -27,8 +27,8 @@ export default function BottomNav() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-around',
-          paddingTop: '8px',
-          paddingBottom: 'max(env(safe-area-inset-bottom), 12px)',
+          paddingTop: '10px',
+          paddingBottom: 'max(env(safe-area-inset-bottom), 20px)',
         }}
       >
         {/* Home */}
@@ -96,7 +96,7 @@ export default function BottomNav() {
           <span>Categorías</span>
         </button>
 
-        {/* Tienda */}
+        {/* Kiosko */}
         <a
           href="https://upaninews.com/tienda/"
           target="_blank"
@@ -115,8 +115,8 @@ export default function BottomNav() {
             transition: 'color 0.2s',
           }}
         >
-          <ShopIcon />
-          <span>Tienda</span>
+          <KioskoIcon />
+          <span>Kiosko</span>
         </a>
       </nav>
 
@@ -154,12 +154,21 @@ function MenuIcon() {
   )
 }
 
-function ShopIcon() {
+function KioskoIcon() {
   return (
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
-      <line x1="3" y1="6" x2="21" y2="6" />
-      <path d="M16 10a4 4 0 01-8 0" />
+      {/* Roof / awning */}
+      <path d="M2 8h20" />
+      <path d="M4 8V6a1 1 0 011-1h14a1 1 0 011 1v2" />
+      {/* Stand body */}
+      <rect x="5" y="8" width="14" height="10" rx="1" />
+      {/* Newspapers on display */}
+      <line x1="8" y1="12" x2="16" y2="12" />
+      <line x1="8" y1="14.5" x2="16" y2="14.5" />
+      {/* Legs */}
+      <line x1="7" y1="18" x2="7" y2="21" />
+      <line x1="17" y1="18" x2="17" y2="21" />
+      <line x1="5" y1="21" x2="19" y2="21" />
     </svg>
   )
 }
