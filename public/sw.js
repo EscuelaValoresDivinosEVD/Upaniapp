@@ -15,9 +15,12 @@ self.addEventListener('notificationclick', (event) => {
   event.notification.close()
   event.waitUntil(
     clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
-      const url = event.notification.data?.url ?? '/'
+      const path = event.notification.data?.url ?? '/'
+      const url = self.registration.scope.replace(/\/$/, '') + path
       for (const client of clientList) {
-        if ('focus' in client) return client.focus()
+        if (client.url.startsWith(self.registration.scope) && 'focus' in client) {
+          return client.navigate ? client.navigate(url).then(c => c.focus()) : client.focus()
+        }
       }
       if (clients.openWindow) return clients.openWindow(url)
     })

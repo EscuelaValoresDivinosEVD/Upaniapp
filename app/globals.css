@@ -39,6 +39,7 @@
   --text-muted: #7B5A9A;
   --accent: #5C2585;
   --accent-warm: #8A4EC8;
+  --orange: #C4622D;
   color-scheme: light;
 }
 
@@ -52,6 +53,7 @@
   --text-muted: #7A5A9A;
   --accent: #B07FD8;
   --accent-warm: #CE9EF0;
+  --orange: #E8895A;
   color-scheme: dark;
 }
 

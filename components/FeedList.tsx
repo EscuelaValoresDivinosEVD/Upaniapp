@@ -54,11 +54,31 @@ export default function FeedList({ categorySlug }: Props) {
     )
   }
 
+  const featured = items.slice(0, 5)
+  const grid = items.slice(5)
+
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-      {items.map((item, i) => (
-        <ArticleCard key={item.guid || item.link} item={item} index={i} />
-      ))}
+    <div>
+      {/* First 5 full width */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+        {featured.map((item, i) => (
+          <ArticleCard key={item.guid || item.link} item={item} index={i} />
+        ))}
+      </div>
+
+      {/* Rest in 2-column grid */}
+      {grid.length > 0 && (
+        <>
+          <div style={{ textAlign: 'center', margin: '28px 0 20px', color: 'var(--border)', letterSpacing: '0.3em', fontSize: '0.9rem' }}>
+            ✦ ✦ ✦
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+            {grid.map((item, i) => (
+              <ArticleCard key={item.guid || item.link} item={item} index={i + 5} compact />
+            ))}
+          </div>
+        </>
+      )}
     </div>
   )
 }
