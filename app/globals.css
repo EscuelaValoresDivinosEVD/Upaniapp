@@ -59,10 +59,12 @@
 
 * {
   box-sizing: border-box;
+  max-width: 100%;
 }
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
@@ -79,6 +81,9 @@ body {
   color: var(--text);
   font-family: var(--font-reading);
   line-height: 1.9;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  overflow-x: hidden;
 }
 
 .prose-vintage h1,
@@ -110,12 +115,53 @@ body {
   color: var(--accent);
 }
 
+.prose-vintage img,
+.prose-vintage video,
+.prose-vintage figure,
+.prose-vintage embed,
+.prose-vintage object {
+  max-width: 100% !important;
+  height: auto;
+}
+
 .prose-vintage img {
   border-radius: 4px;
-  max-width: 100%;
-  height: auto;
   margin: 1.5em auto;
   display: block;
+  border: 1px solid var(--border);
+}
+
+.prose-vintage figure {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+/* Responsive iframes (YouTube, Vimeo, etc.) */
+.prose-vintage iframe {
+  max-width: 100% !important;
+  width: 100%;
+}
+
+.prose-vintage .wp-block-embed,
+.prose-vintage .wp-block-video,
+.prose-vintage .embed-responsive {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* Scrollable tables */
+.prose-vintage table {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-collapse: collapse;
+}
+
+.prose-vintage td,
+.prose-vintage th {
+  padding: 6px 10px;
   border: 1px solid var(--border);
 }
 
