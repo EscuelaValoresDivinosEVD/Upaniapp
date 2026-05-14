@@ -499,37 +499,79 @@ export default function ReaderClient({ slug, title, pubDate, categories, content
           </div>
         )}
 
-        {/* Footer ornament */}
-        <div style={{
-          textAlign: 'center',
-          marginTop: '48px',
-          color: 'var(--accent-warm)',
-          fontSize: '1.2rem',
-          letterSpacing: '0.3em',
-        }}>
-          ❦
+        {/* Footer ornament — UpaniLogo SVG */}
+        <div style={{ textAlign: 'center', marginTop: '48px' }}>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 907 601.67" style={{ width: '48px', height: 'auto', display: 'inline-block' }}>
+            <circle fill="#E8895A" cx="453.5" cy="32.36" r="22.3"/>
+            <ellipse fill="none" stroke="#E8895A" strokeLinecap="round" strokeMiterlimit="10" strokeWidth="18" cx="453.5" cy="300.84" rx="69.23" ry="192.29"/>
+            <line stroke="#E8895A" strokeLinecap="round" strokeMiterlimit="10" strokeWidth="18" x1="624.03" y1="389.74" x2="283.1" y2="389.74"/>
+            <line stroke="#E8895A" strokeLinecap="round" strokeMiterlimit="10" strokeWidth="18" x1="261.21" y1="300.84" x2="644.21" y2="300.84"/>
+            <line stroke="#E8895A" strokeLinecap="round" strokeMiterlimit="10" strokeWidth="18" x1="283.1" y1="211.66" x2="621.82" y2="211.66"/>
+            <circle fill="none" stroke="#E8895A" strokeLinecap="round" strokeMiterlimit="10" strokeWidth="18" cx="453.5" cy="300.84" r="192.29"/>
+            <ellipse fill="none" stroke="#E8895A" strokeLinecap="round" strokeMiterlimit="10" strokeWidth="18" cx="599.94" cy="300.84" rx="146.44" ry="192.29"/>
+            <ellipse fill="none" stroke="#E8895A" strokeLinecap="round" strokeMiterlimit="10" strokeWidth="18" cx="638.55" cy="300.84" rx="185.05" ry="242.99"/>
+            <ellipse fill="none" stroke="#E8895A" strokeLinecap="round" strokeMiterlimit="10" strokeWidth="18" cx="675.75" cy="300.84" rx="222.25" ry="291.84"/>
+            <ellipse fill="none" stroke="#E8895A" strokeLinecap="round" strokeMiterlimit="10" strokeWidth="18" cx="307.06" cy="300.84" rx="146.44" ry="192.29"/>
+            <ellipse fill="none" stroke="#E8895A" strokeLinecap="round" strokeMiterlimit="10" strokeWidth="18" cx="268.45" cy="300.84" rx="185.05" ry="242.99"/>
+            <ellipse fill="none" stroke="#E8895A" strokeLinecap="round" strokeMiterlimit="10" strokeWidth="18" cx="231.25" cy="300.84" rx="222.25" ry="291.84"/>
+          </svg>
         </div>
 
-        {/* Source link */}
+        {/* Share + source link */}
         <div style={{
-          textAlign: 'center',
-          marginTop: '24px',
+          marginTop: '28px',
           paddingTop: '24px',
           borderTop: '1px solid var(--border)',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '16px',
         }}>
+          {/* Share button */}
+          <button
+            onClick={() => {
+              if (navigator.share) {
+                navigator.share({ title, url: sourceUrl }).catch(() => {})
+              } else {
+                navigator.clipboard?.writeText(sourceUrl)
+              }
+            }}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              padding: '10px 24px',
+              background: 'var(--card)',
+              border: '1px solid var(--border)',
+              borderRadius: '8px',
+              cursor: 'pointer',
+              color: 'var(--text-soft)',
+              fontFamily: 'var(--font-ui)',
+              fontSize: '0.88rem',
+              letterSpacing: '0.03em',
+            }}
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+              <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+            </svg>
+            Compartir artículo
+          </button>
+
+          {/* Source link */}
           <a
             href={sourceUrl}
             target="_blank"
             rel="noopener noreferrer"
             style={{
               fontSize: '0.78rem',
-              color: 'var(--text-muted)',
+              color: 'var(--accent-warm)',
               fontFamily: 'var(--font-ui)',
-              textDecoration: 'none',
+              textDecoration: 'underline',
               fontStyle: 'italic',
             }}
           >
-            Ver en upaninews.com ↗
+            Ver en upaninews.com
           </a>
         </div>
       </main>
