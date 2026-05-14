@@ -3,6 +3,7 @@ import { Playfair_Display, Lora } from 'next/font/google'
 import './globals.css'
 import { ThemeProvider } from '@/components/ThemeProvider'
 import BottomNav from '@/components/BottomNav'
+import ServiceWorkerSetup from '@/components/ServiceWorkerSetup'
 
 const playfair = Playfair_Display({
   subsets: ['latin'],
@@ -19,6 +20,7 @@ const lora = Lora({
 export const metadata: Metadata = {
   title: 'Upaninews',
   description: 'Revista digital de consciencia, espiritualidad y cultura',
+  manifest: '/manifest.json',
 }
 
 export const viewport: Viewport = {
@@ -45,6 +47,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body>
         <ThemeProvider>
+          <ServiceWorkerSetup />
           {children}
           <BottomNav />
         </ThemeProvider>
