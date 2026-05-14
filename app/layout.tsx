@@ -22,6 +22,23 @@ export const metadata: Metadata = {
   title: 'Upaninews',
   description: 'Revista digital de consciencia, espiritualidad y cultura',
   manifest: '/manifest.json',
+  icons: {
+    icon: '/icons/icon-192.png',
+    apple: '/icons/icon-192.png',
+  },
+  openGraph: {
+    title: 'Upaninews',
+    description: 'Revista digital de consciencia, espiritualidad y cultura',
+    images: [{ url: '/icons/icon-512.png', width: 512, height: 512, alt: 'Upaninews' }],
+    type: 'website',
+    locale: 'es_ES',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'Upaninews',
+    description: 'Revista digital de consciencia, espiritualidad y cultura',
+    images: ['/icons/icon-512.png'],
+  },
 }
 
 export const viewport: Viewport = {
