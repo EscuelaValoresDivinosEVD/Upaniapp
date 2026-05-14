@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { useEffect } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { CATEGORIES, CATEGORY_GROUPS } from '@/lib/categories'
 
 interface Props {
@@ -9,15 +9,104 @@ interface Props {
   onClose: () => void
 }
 
+const SWIPE_THRESHOLD = 80
+
 export default function CategoryDrawer({ open, onClose }: Props) {
+  const drawerRef = useRef<HTMLDivElement>(null)
+  const [dragY, setDragY] = useState(0)
+  const dragStartRef = useRef(0)
+  const draggingRef = useRef(false)
+  const dragYRef = useRef(0)
+  const onCloseRef = useRef(onClose)
+  useEffect(() => { onCloseRef.current = onClose }, [onClose])
+
+  // iOS-safe scroll lock: position:fixed saves scroll without bounce-through
   useEffect(() => {
     if (open) {
+      const scrollY = window.scrollY
       document.body.style.overflow = 'hidden'
+      document.body.style.position = 'fixed'
+      document.body.style.width = '100%'
+      document.body.style.top = `-${scrollY}px`
     } else {
+      const top = document.body.style.top
       document.body.style.overflow = ''
+      document.body.style.position = ''
+      document.body.style.width = ''
+      document.body.style.top = ''
+      if (top) window.scrollTo(0, -parseInt(top))
+      // reset drag when closing
+      setDragY(0)
+      dragYRef.current = 0
+      draggingRef.current = false
     }
-    return () => { document.body.style.overflow = '' }
+    return () => {
+      const top = document.body.style.top
+      document.body.style.overflow = ''
+      document.body.style.position = ''
+      document.body.style.width = ''
+      document.body.style.top = ''
+      if (top) window.scrollTo(0, -parseInt(top))
+    }
   }, [open])
+
+  // Swipe down to close — registered once, uses refs to avoid stale closures
+  useEffect(() => {
+    const el = drawerRef.current
+    if (!el) return
+
+    const onTouchStart = (e: TouchEvent) => {
+      if (el.scrollTop === 0) {
+        dragStartRef.current = e.touches[0].clientY
+        draggingRef.current = true
+      }
+    }
+
+    const onTouchMove = (e: TouchEvent) => {
+      if (!draggingRef.current) return
+      if (el.scrollTop > 0) {
+        draggingRef.current = false
+        dragYRef.current = 0
+        setDragY(0)
+        return
+      }
+      const delta = e.touches[0].clientY - dragStartRef.current
+      if (delta > 0) {
+        e.preventDefault()
+        dragYRef.current = delta
+        setDragY(delta)
+      }
+    }
+
+    const onTouchEnd = () => {
+      if (!draggingRef.current) return
+      draggingRef.current = false
+      const d = dragYRef.current
+      dragYRef.current = 0
+      setDragY(0)
+      if (d >= SWIPE_THRESHOLD) onCloseRef.current()
+    }
+
+    el.addEventListener('touchstart', onTouchStart, { passive: true })
+    el.addEventListener('touchmove', onTouchMove, { passive: false })
+    el.addEventListener('touchend', onTouchEnd, { passive: true })
+
+    return () => {
+      el.removeEventListener('touchstart', onTouchStart)
+      el.removeEventListener('touchmove', onTouchMove)
+      el.removeEventListener('touchend', onTouchEnd)
+    }
+  }, [])
+
+  const drawerTransform = !open
+    ? 'translateY(100%)'
+    : dragY > 0
+      ? `translateY(${dragY}px)`
+      : 'translateY(0)'
+
+  const drawerTransition = dragY > 0
+    ? 'none'
+    : 'transform 0.35s cubic-bezier(0.32, 0.72, 0, 1)'
 
   return (
     <>
@@ -37,6 +126,7 @@ export default function CategoryDrawer({ open, onClose }: Props) {
 
       {/* Drawer */}
       <div
+        ref={drawerRef}
         style={{
           position: 'fixed',
           bottom: 0,
@@ -48,12 +138,13 @@ export default function CategoryDrawer({ open, onClose }: Props) {
           borderTop: '1px solid var(--border)',
           maxHeight: '80vh',
           overflowY: 'auto',
-          transform: open ? 'translateY(0)' : 'translateY(100%)',
-          transition: 'transform 0.35s cubic-bezier(0.32, 0.72, 0, 1)',
+          overscrollBehavior: 'contain',
+          transform: drawerTransform,
+          transition: drawerTransition,
           paddingBottom: 'calc(env(safe-area-inset-bottom) + 80px)',
         }}
       >
-        {/* Handle */}
+        {/* Handle bar */}
         <div style={{ display: 'flex', justifyContent: 'center', padding: '12px 0 4px' }}>
           <div style={{
             width: '40px',
