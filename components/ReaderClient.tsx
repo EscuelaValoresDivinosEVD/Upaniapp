@@ -97,7 +97,6 @@ async function translateText(html: string, targetLang: string): Promise<string> 
 
 export default function ReaderClient({ slug, title, pubDate, categories, content, description, image, sourceUrl }: Props) {
   const [fontIndex, setFontIndex] = useState(1)
-  const [showControls, setShowControls] = useState(false)
   const [showLangPicker, setShowLangPicker] = useState(false)
   const [translating, setTranslating] = useState(false)
   const [translated, setTranslated] = useState<string | null>(null)
@@ -184,7 +183,7 @@ export default function ReaderClient({ slug, title, pubDate, categories, content
           {/* Translate button */}
           <div style={{ position: 'relative' }}>
             <button
-              onClick={() => { setShowLangPicker(!showLangPicker); setShowControls(false) }}
+              onClick={() => setShowLangPicker(!showLangPicker)}
               style={{
                 background: activeLang || showLangPicker ? 'var(--card)' : 'none',
                 border: activeLang ? '1px solid var(--accent-warm)' : '1px solid var(--border)',
@@ -266,62 +265,43 @@ export default function ReaderClient({ slug, title, pubDate, categories, content
             )}
           </div>
 
-          {/* Font size control */}
-          <div style={{ position: 'relative' }}>
+          {/* Font size − / + */}
+          <div style={{ display: 'flex', alignItems: 'center', border: '1px solid var(--border)', borderRadius: '6px', overflow: 'hidden' }}>
             <button
-              onClick={() => { setShowControls(!showControls); setShowLangPicker(false) }}
+              onClick={() => changeFontSize(Math.max(0, fontIndex - 1))}
+              disabled={fontIndex === 0}
               style={{
-                background: showControls ? 'var(--card)' : 'none',
-                border: '1px solid var(--border)',
-                borderRadius: '6px',
+                background: 'none',
+                border: 'none',
+                borderRight: '1px solid var(--border)',
                 padding: '5px 10px',
-                cursor: 'pointer',
-                color: 'var(--text-soft)',
+                cursor: fontIndex === 0 ? 'default' : 'pointer',
+                color: fontIndex === 0 ? 'var(--border)' : 'var(--text-soft)',
                 fontFamily: 'var(--font-display)',
-                fontSize: '0.8rem',
-                letterSpacing: '0.05em',
+                fontSize: '1rem',
+                lineHeight: 1,
               }}
+              title="Texto más pequeño"
             >
-              Aa
+              A−
             </button>
-
-            {showControls && (
-              <div style={{
-                position: 'absolute',
-                top: '38px',
-                right: 0,
-                background: 'var(--surface)',
-                border: '1px solid var(--border)',
-                borderRadius: '10px',
-                padding: '10px 12px',
-                boxShadow: '0 4px 20px rgba(0,0,0,0.15)',
-                display: 'flex',
-                gap: '8px',
-                whiteSpace: 'nowrap',
-                zIndex: 100,
-              }}>
-                {FONT_SIZES.map((size, idx) => (
-                  <button
-                    key={size.label}
-                    onClick={() => changeFontSize(idx)}
-                    style={{
-                      width: '36px',
-                      height: '36px',
-                      borderRadius: '6px',
-                      border: idx === fontIndex ? '2px solid var(--accent-warm)' : '1px solid var(--border)',
-                      background: idx === fontIndex ? 'var(--card)' : 'none',
-                      cursor: 'pointer',
-                      color: idx === fontIndex ? 'var(--accent-warm)' : 'var(--text-muted)',
-                      fontFamily: 'var(--font-display)',
-                      fontSize: '0.8rem',
-                      fontWeight: idx === fontIndex ? '700' : '400',
-                    }}
-                  >
-                    {size.label}
-                  </button>
-                ))}
-              </div>
-            )}
+            <button
+              onClick={() => changeFontSize(Math.min(FONT_SIZES.length - 1, fontIndex + 1))}
+              disabled={fontIndex === FONT_SIZES.length - 1}
+              style={{
+                background: 'none',
+                border: 'none',
+                padding: '5px 10px',
+                cursor: fontIndex === FONT_SIZES.length - 1 ? 'default' : 'pointer',
+                color: fontIndex === FONT_SIZES.length - 1 ? 'var(--border)' : 'var(--text-soft)',
+                fontFamily: 'var(--font-display)',
+                fontSize: '1.1rem',
+                lineHeight: 1,
+              }}
+              title="Texto más grande"
+            >
+              A+
+            </button>
           </div>
 
           {/* Theme toggle */}
