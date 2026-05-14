@@ -1,5 +1,6 @@
 import { slugToCategoryName } from '@/lib/categories'
 import ThemeToggleHeader from '@/components/ThemeToggleHeader'
+import PushNotificationToggle from '@/components/PushNotificationToggle'
 import FeedList from '@/components/FeedList'
 import Link from 'next/link'
 
@@ -48,7 +49,10 @@ export default async function CategoryPage({ params }: Props) {
             {categoryName}
           </h1>
         </div>
-        <ThemeToggleHeader />
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <PushNotificationToggle />
+          <ThemeToggleHeader />
+        </div>
       </header>
 
       <div style={{ textAlign: 'center', padding: '14px 0 4px', color: 'var(--accent-warm)', fontSize: '0.9rem', letterSpacing: '0.4em' }}>
