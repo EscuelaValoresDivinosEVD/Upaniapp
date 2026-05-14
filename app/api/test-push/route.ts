@@ -20,19 +20,20 @@ export async function POST(req: Request) {
 
   const { title = 'Upaninews', body = '', url = '/' } = await req.json().catch(() => ({}))
 
-  const subs = await getRedis().smembers<string[]>(SUBS_KEY)
+  const subs = await getRedis().smembers(SUBS_KEY)
   if (!subs || subs.length === 0) {
     return Response.json({ ok: true, sent: 0, message: 'No hay suscriptores' })
   }
 
   const payload = JSON.stringify({ title, body, url })
   const results = await Promise.allSettled(
-    subs.map((sub) => webpush.sendNotification(JSON.parse(sub), payload))
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    subs.map((sub) => webpush.sendNotification(sub as any, payload))
   )
 
   const expired = results
     .map((r, i) => (r.status === 'rejected' ? subs[i] : null))
-    .filter((s): s is string => s !== null)
+    .filter((s) => s !== null)
   if (expired.length) {
     await Promise.all(expired.map((s) => getRedis().srem(SUBS_KEY, s)))
   }
