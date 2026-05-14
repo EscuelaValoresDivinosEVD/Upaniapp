@@ -4,7 +4,7 @@
   "description": "Revista digital de consciencia, espiritualidad y cultura",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#F3EAF3",
+  "background_color": "#561e57",
   "theme_color": "#561e57",
   "icons": [
     {
