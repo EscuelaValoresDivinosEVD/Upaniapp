@@ -1,8 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { fetchFeedClient, type RssItem } from '@/lib/rss-client'
-import { categoryNameToSlug } from '@/lib/categories'
+import { fetchFeedClient, fetchFeedByCategory, type RssItem } from '@/lib/rss-client'
 import ArticleCard from './ArticleCard'
 
 interface Props {
@@ -14,13 +13,12 @@ export default function FeedList({ categorySlug }: Props) {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    fetchFeedClient().then((all) => {
-      const filtered = categorySlug
-        ? all.filter((item) =>
-            item.categories.some((cat) => categoryNameToSlug(cat) === categorySlug)
-          )
-        : all
-      setItems(filtered)
+    setLoading(true)
+    const fetcher = categorySlug
+      ? fetchFeedByCategory(categorySlug)
+      : fetchFeedClient()
+    fetcher.then((result) => {
+      setItems(result)
       setLoading(false)
     })
   }, [categorySlug])
