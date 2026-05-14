@@ -6,19 +6,83 @@ import { RssItem, formatDate } from '@/lib/rss'
 interface Props {
   item: RssItem
   index?: number
+  compact?: boolean
 }
 
-export default function ArticleCard({ item, index = 0 }: Props) {
+export default function ArticleCard({ item, index = 0, compact = false }: Props) {
   const delay = Math.min(index * 60, 400)
+
+  if (compact) {
+    return (
+      <Link
+        href={`/article/${item.slug}`}
+        style={{ display: 'block', textDecoration: 'none', animationDelay: `${delay}ms`, height: '100%' }}
+        className="animate-fade-in"
+      >
+        <article
+          style={{
+            background: 'var(--card)',
+            border: '1px solid var(--border)',
+            borderRadius: '8px',
+            overflow: 'hidden',
+            height: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            transition: 'transform 0.2s ease',
+          }}
+          onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)' }}
+          onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)' }}
+        >
+          {item.image && (
+            <div style={{ aspectRatio: '4/3', overflow: 'hidden', flexShrink: 0 }}>
+              <img
+                src={item.image}
+                alt={item.title}
+                style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                loading="lazy"
+              />
+            </div>
+          )}
+          <div style={{ padding: '10px 11px 12px', flex: 1, display: 'flex', flexDirection: 'column', gap: '5px' }}>
+            {item.categories[0] && (
+              <span style={{
+                fontSize: '0.6rem',
+                letterSpacing: '0.1em',
+                textTransform: 'uppercase',
+                color: 'var(--orange)',
+                fontFamily: 'var(--font-ui)',
+              }}>
+                {item.categories[0]}
+              </span>
+            )}
+            <h3 style={{
+              fontFamily: 'var(--font-display)',
+              fontSize: '0.88rem',
+              fontWeight: '700',
+              lineHeight: '1.3',
+              color: 'var(--text)',
+              margin: 0,
+              flex: 1,
+              display: '-webkit-box',
+              WebkitLineClamp: 4,
+              WebkitBoxOrient: 'vertical',
+              overflow: 'hidden',
+            }}>
+              {item.title}
+            </h3>
+            <time style={{ fontSize: '0.65rem', color: 'var(--text-muted)', fontFamily: 'var(--font-ui)', fontStyle: 'italic' }}>
+              {formatDate(item.pubDate)}
+            </time>
+          </div>
+        </article>
+      </Link>
+    )
+  }
 
   return (
     <Link
       href={`/article/${item.slug}`}
-      style={{
-        display: 'block',
-        textDecoration: 'none',
-        animationDelay: `${delay}ms`,
-      }}
+      style={{ display: 'block', textDecoration: 'none', animationDelay: `${delay}ms` }}
       className="animate-fade-in"
     >
       <article
@@ -29,11 +93,11 @@ export default function ArticleCard({ item, index = 0 }: Props) {
           overflow: 'hidden',
           transition: 'transform 0.2s ease, box-shadow 0.2s ease',
         }}
-        onMouseEnter={(e) => {
+        onMouseEnter={e => {
           e.currentTarget.style.transform = 'translateY(-2px)'
           e.currentTarget.style.boxShadow = '0 4px 16px rgba(45,31,14,0.12)'
         }}
-        onMouseLeave={(e) => {
+        onMouseLeave={e => {
           e.currentTarget.style.transform = 'translateY(0)'
           e.currentTarget.style.boxShadow = 'none'
         }}
@@ -43,53 +107,44 @@ export default function ArticleCard({ item, index = 0 }: Props) {
             <img
               src={item.image}
               alt={item.title}
-              style={{
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover',
-                display: 'block',
-              }}
+              style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
               loading="lazy"
             />
           </div>
         )}
 
         <div style={{ padding: '16px 18px 18px' }}>
-          {/* Categories */}
           {item.categories.length > 0 && (
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '10px' }}>
-              {item.categories.slice(0, 2).map((cat) => (
+              {item.categories.slice(0, 2).map((cat, i) => (
                 <span
                   key={cat}
                   style={{
                     fontSize: '0.68rem',
                     letterSpacing: '0.1em',
                     textTransform: 'uppercase',
-                    color: 'var(--accent-warm)',
+                    color: i === 0 ? 'var(--accent-warm)' : 'var(--orange)',
                     fontFamily: 'var(--font-ui)',
                   }}
                 >
+                  {i > 0 && <span style={{ color: 'var(--border)', marginRight: '6px' }}>·</span>}
                   {cat}
                 </span>
               ))}
             </div>
           )}
 
-          {/* Title */}
-          <h2
-            style={{
-              fontFamily: 'var(--font-display)',
-              fontSize: '1.15rem',
-              fontWeight: '700',
-              lineHeight: '1.35',
-              color: 'var(--text)',
-              margin: '0 0 10px',
-            }}
-          >
+          <h2 style={{
+            fontFamily: 'var(--font-display)',
+            fontSize: '1.15rem',
+            fontWeight: '700',
+            lineHeight: '1.35',
+            color: 'var(--text)',
+            margin: '0 0 10px',
+          }}>
             {item.title}
           </h2>
 
-          {/* Description */}
           {item.description && (
             <p
               style={{
@@ -108,7 +163,6 @@ export default function ArticleCard({ item, index = 0 }: Props) {
             />
           )}
 
-          {/* Date + Read more */}
           <div style={{
             display: 'flex',
             alignItems: 'center',
@@ -126,7 +180,7 @@ export default function ArticleCard({ item, index = 0 }: Props) {
             </time>
             <span style={{
               fontSize: '0.78rem',
-              color: 'var(--accent-warm)',
+              color: 'var(--orange)',
               fontFamily: 'var(--font-display)',
               letterSpacing: '0.03em',
             }}>
