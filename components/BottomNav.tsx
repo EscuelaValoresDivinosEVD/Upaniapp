@@ -19,8 +19,9 @@ export default function BottomNav() {
     display: 'flex' as const,
     flexDirection: 'column' as const,
     alignItems: 'center' as const,
-    gap: '2px',
-    padding: '4px 6px',
+    gap: '4px',
+    padding: '2px 0',
+    minWidth: '48px',
     color: active ? 'var(--accent-warm)' : 'var(--text-muted)',
     textDecoration: 'none',
     fontSize: '10px',
@@ -37,9 +38,9 @@ export default function BottomNav() {
       <nav style={{
         position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 50,
         background: 'var(--surface)', borderTop: '1px solid var(--border)',
-        display: 'flex', alignItems: 'center', justifyContent: 'space-around',
-        paddingTop: '10px',
-        paddingBottom: 'max(env(safe-area-inset-bottom), 20px)',
+        display: 'flex', alignItems: 'center', justifyContent: 'space-evenly',
+        padding: '10px 16px',
+        paddingBottom: 'max(calc(env(safe-area-inset-bottom) + 10px), 20px)',
       }}>
         <Link href="/" style={itemStyle(isHome)}>
           <HomeIcon active={isHome} />
