@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next'
 import { Oswald, Lora } from 'next/font/google'
+import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 import { ThemeProvider } from '@/components/ThemeProvider'
 import BottomNav from '@/components/BottomNav'
@@ -69,6 +70,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           {children}
           <BottomNav />
           <InstallPrompt />
+          <Analytics />
         </ThemeProvider>
       </body>
     </html>
