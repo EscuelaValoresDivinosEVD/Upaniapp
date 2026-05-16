@@ -96,19 +96,21 @@ self.addEventListener('fetch', (event) => {
 // ── Push notifications ────────────────────────────────────────────────────
 self.addEventListener('push', (event) => {
   const data = event.data?.json() ?? {}
-  event.waitUntil(
-    self.registration.showNotification(data.title ?? 'Upaninews', {
-      body: data.body ?? '',
-      icon: '/icons/icon-192.png',
-      badge: '/icons/icon-192.png',
-      data: { url: data.url ?? '/' },
-      vibrate: [100, 50, 100],
-    })
-  )
+  const show = self.registration.showNotification(data.title ?? 'Upaninews', {
+    body: data.body ?? '',
+    icon: '/icons/icon-192.png',
+    badge: '/icons/icon-192.png',
+    data: { url: data.url ?? '/' },
+    vibrate: [100, 50, 100],
+  }).then(() => {
+    if ('setAppBadge' in navigator) return navigator.setAppBadge(1)
+  })
+  event.waitUntil(show)
 })
 
 self.addEventListener('notificationclick', (event) => {
   event.notification.close()
+  if ('clearAppBadge' in navigator) navigator.clearAppBadge()
   event.waitUntil(
     clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
       const path = event.notification.data?.url ?? '/'
