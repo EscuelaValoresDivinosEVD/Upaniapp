@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import PushNotificationToggle from './PushNotificationToggle'
 import { useTheme } from './ThemeProvider'
+import { useState } from 'react'
 
 export default function SettingsPage() {
   const { theme, toggle } = useTheme()
@@ -122,7 +123,7 @@ export default function SettingsPage() {
         </section>
 
         {/* Apariencia */}
-        <section>
+        <section style={{ marginBottom: '32px' }}>
           <p style={{
             fontSize: '0.65rem', letterSpacing: '0.15em', textTransform: 'uppercase',
             color: 'var(--text-muted)', fontFamily: 'var(--font-ui)',
@@ -167,6 +168,9 @@ export default function SettingsPage() {
           </div>
         </section>
 
+        {/* Admin */}
+        <AdminSection />
+
       </main>
     </div>
   )
@@ -200,5 +204,158 @@ function NotifRow() {
         </div>
       </div>
     </div>
+  )
+}
+
+function AdminSection() {
+  const [unlocked, setUnlocked] = useState(false)
+  const [secret, setSecret] = useState('')
+  const [title, setTitle] = useState('')
+  const [body, setBody] = useState('')
+  const [url, setUrl] = useState('')
+  const [status, setStatus] = useState<null | { ok: boolean; msg: string }>(null)
+  const [sending, setSending] = useState(false)
+
+  const unlock = () => {
+    if (secret.trim()) setUnlocked(true)
+  }
+
+  const send = async () => {
+    if (!title.trim() || !body.trim()) return
+    setSending(true)
+    setStatus(null)
+    try {
+      const res = await fetch('/api/test-push', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${secret}`,
+        },
+        body: JSON.stringify({ title: title.trim(), body: body.trim(), url: url.trim() || '/' }),
+      })
+      const data = await res.json()
+      if (res.ok && data.ok) {
+        setStatus({ ok: true, msg: `Enviada a ${data.sent} suscriptor${data.sent !== 1 ? 'es' : ''}` })
+        setTitle('')
+        setBody('')
+        setUrl('')
+      } else {
+        setStatus({ ok: false, msg: res.status === 401 ? 'Contraseña incorrecta' : 'Error al enviar' })
+      }
+    } catch {
+      setStatus({ ok: false, msg: 'Error de conexión' })
+    } finally {
+      setSending(false)
+    }
+  }
+
+  const inputStyle = {
+    width: '100%',
+    padding: '10px 12px',
+    borderRadius: '8px',
+    border: '1px solid var(--border)',
+    background: 'var(--bg)',
+    color: 'var(--text)',
+    fontFamily: 'var(--font-ui)',
+    fontSize: '0.88rem',
+    outline: 'none',
+    boxSizing: 'border-box' as const,
+  }
+
+  return (
+    <section>
+      <p style={{
+        fontSize: '0.65rem', letterSpacing: '0.15em', textTransform: 'uppercase',
+        color: 'var(--text-muted)', fontFamily: 'var(--font-ui)',
+        margin: '0 0 10px 4px',
+      }}>
+        Administración
+      </p>
+      <div style={{
+        background: 'var(--card)', border: '1px solid var(--border)',
+        borderRadius: '12px', overflow: 'hidden',
+      }}>
+        {!unlocked ? (
+          <div style={{ padding: '16px 18px' }}>
+            <p style={{ margin: '0 0 10px', fontFamily: 'var(--font-ui)', fontSize: '0.88rem', color: 'var(--text-muted)' }}>
+              Ingresa la contraseña de administrador
+            </p>
+            <div style={{ display: 'flex', gap: '8px' }}>
+              <input
+                type="password"
+                placeholder="Contraseña"
+                value={secret}
+                onChange={e => setSecret(e.target.value)}
+                onKeyDown={e => e.key === 'Enter' && unlock()}
+                style={inputStyle}
+              />
+              <button
+                onClick={unlock}
+                style={{
+                  padding: '10px 16px', borderRadius: '8px',
+                  background: 'var(--accent-warm)', color: '#fff',
+                  border: 'none', cursor: 'pointer',
+                  fontFamily: 'var(--font-ui)', fontSize: '0.88rem',
+                  fontWeight: '600', whiteSpace: 'nowrap' as const,
+                }}
+              >
+                Entrar
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div style={{ padding: '16px 18px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            <p style={{ margin: 0, fontFamily: 'var(--font-ui)', fontSize: '0.95rem', fontWeight: '600', color: 'var(--text)' }}>
+              Enviar notificación push
+            </p>
+            <input
+              type="text"
+              placeholder="Título *"
+              value={title}
+              onChange={e => setTitle(e.target.value)}
+              style={inputStyle}
+            />
+            <textarea
+              placeholder="Mensaje *"
+              value={body}
+              onChange={e => setBody(e.target.value)}
+              rows={3}
+              style={{ ...inputStyle, resize: 'vertical' as const }}
+            />
+            <input
+              type="text"
+              placeholder="URL (opcional, ej: /)"
+              value={url}
+              onChange={e => setUrl(e.target.value)}
+              style={inputStyle}
+            />
+            {status && (
+              <p style={{
+                margin: 0, fontFamily: 'var(--font-ui)', fontSize: '0.83rem',
+                color: status.ok ? '#6abf6a' : '#e07070',
+                padding: '8px 12px', borderRadius: '8px',
+                background: status.ok ? 'rgba(106,191,106,0.1)' : 'rgba(224,112,112,0.1)',
+              }}>
+                {status.msg}
+              </p>
+            )}
+            <button
+              onClick={send}
+              disabled={sending || !title.trim() || !body.trim()}
+              style={{
+                padding: '12px', borderRadius: '8px',
+                background: sending || !title.trim() || !body.trim() ? 'var(--border)' : 'var(--accent-warm)',
+                color: '#fff', border: 'none',
+                cursor: sending || !title.trim() || !body.trim() ? 'not-allowed' : 'pointer',
+                fontFamily: 'var(--font-ui)', fontSize: '0.92rem', fontWeight: '600',
+                transition: 'background 0.2s',
+              }}
+            >
+              {sending ? 'Enviando…' : 'Enviar a todos los suscriptores'}
+            </button>
+          </div>
+        )}
+      </div>
+    </section>
   )
 }
