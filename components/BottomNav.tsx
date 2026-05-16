@@ -14,6 +14,7 @@ export default function BottomNav() {
   const isHome = pathname === '/'
   const isSaved = pathname === '/saved'
   const isSettings = pathname === '/settings'
+  const isKiosko = pathname === '/kiosko'
 
   const itemStyle = (active: boolean) => ({
     display: 'flex' as const,
@@ -52,10 +53,10 @@ export default function BottomNav() {
           <span>Buscar</span>
         </button>
 
-        <a href="https://upaninews.com/tienda" target="_blank" rel="noopener noreferrer" style={itemStyle(false)}>
-          <KioskoIcon />
+        <Link href="/kiosko" style={itemStyle(isKiosko)}>
+          <KioskoIcon active={isKiosko} />
           <span>Kiosko</span>
-        </a>
+        </Link>
 
         <button onClick={() => setDrawerOpen(true)} style={itemStyle(false)}>
           <MenuIcon />
@@ -124,9 +125,9 @@ function SettingsIcon({ active }: { active: boolean }) {
   )
 }
 
-function KioskoIcon() {
+function KioskoIcon({ active }: { active?: boolean }) {
   return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={active ? 2.2 : 1.8} strokeLinecap="round" strokeLinejoin="round">
       <path d="M2 8h20" />
       <path d="M4 8V6a1 1 0 011-1h14a1 1 0 011 1v2" />
       <rect x="5" y="8" width="14" height="10" rx="1" />
