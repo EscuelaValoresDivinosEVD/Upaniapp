@@ -168,7 +168,7 @@ export default function SettingsPage() {
           </div>
         </section>
 
-        {/* Admin */}
+        {/* Admin — hidden, tap logo 5x to reveal */}
         <AdminSection />
 
       </main>
@@ -208,13 +208,24 @@ function NotifRow() {
 }
 
 function AdminSection() {
-  const [unlocked, setUnlocked] = useState(false)
+  const [taps, setTaps] = useState(0)
+  const [revealed, setRevealed] = useState(false)
   const [secret, setSecret] = useState('')
+  const [unlocked, setUnlocked] = useState(false)
   const [title, setTitle] = useState('')
   const [body, setBody] = useState('')
   const [url, setUrl] = useState('')
   const [status, setStatus] = useState<null | { ok: boolean; msg: string }>(null)
   const [sending, setSending] = useState(false)
+
+  const handleLogoTap = () => {
+    const next = taps + 1
+    setTaps(next)
+    if (next >= 5) {
+      setRevealed(true)
+      setTaps(0)
+    }
+  }
 
   const unlock = () => {
     if (secret.trim()) setUnlocked(true)
@@ -263,99 +274,122 @@ function AdminSection() {
   }
 
   return (
-    <section>
-      <p style={{
-        fontSize: '0.65rem', letterSpacing: '0.15em', textTransform: 'uppercase',
-        color: 'var(--text-muted)', fontFamily: 'var(--font-ui)',
-        margin: '0 0 10px 4px',
-      }}>
-        Administración
-      </p>
-      <div style={{
-        background: 'var(--card)', border: '1px solid var(--border)',
-        borderRadius: '12px', overflow: 'hidden',
-      }}>
-        {!unlocked ? (
-          <div style={{ padding: '16px 18px' }}>
-            <p style={{ margin: '0 0 10px', fontFamily: 'var(--font-ui)', fontSize: '0.88rem', color: 'var(--text-muted)' }}>
-              Ingresa la contraseña de administrador
-            </p>
-            <div style={{ display: 'flex', gap: '8px' }}>
+    <section style={{ marginTop: '8px' }}>
+      {/* Decorative logo — tap 5x to reveal admin panel */}
+      <div style={{ display: 'flex', justifyContent: 'center', padding: '24px 0 8px' }}>
+        <button
+          onClick={handleLogoTap}
+          style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '8px', borderRadius: '50%', opacity: 0.25, lineHeight: 0 }}
+          aria-label=""
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 906 601.67"
+            width="36" height="24" style={{ color: 'var(--text-muted)', display: 'block' }}>
+            <defs>
+              <style>{`.as1{fill:currentColor}.as2{fill:none;stroke:currentColor;stroke-linecap:round;stroke-miterlimit:10;stroke-width:18px}`}</style>
+            </defs>
+            <circle className="as1" cx="453.5" cy="32.36" r="22.3"/>
+            <ellipse className="as2" cx="453.5" cy="300.84" rx="69.23" ry="192.29"/>
+            <line className="as2" x1="624.03" y1="389.74" x2="283.1" y2="389.74"/>
+            <line className="as2" x1="261.21" y1="300.84" x2="644.21" y2="300.84"/>
+            <line className="as2" x1="283.1" y1="211.66" x2="621.82" y2="211.66"/>
+            <circle className="as2" cx="453.5" cy="300.84" r="192.29"/>
+            <ellipse className="as2" cx="599.94" cy="300.84" rx="146.44" ry="192.29"/>
+            <ellipse className="as2" cx="638.55" cy="300.84" rx="185.05" ry="242.99"/>
+            <ellipse className="as2" cx="675.75" cy="300.84" rx="222.25" ry="291.84"/>
+            <ellipse className="as2" cx="307.06" cy="300.84" rx="146.44" ry="192.29"/>
+            <ellipse className="as2" cx="268.45" cy="300.84" rx="185.05" ry="242.99"/>
+            <ellipse className="as2" cx="231.25" cy="300.84" rx="222.25" ry="291.84"/>
+          </svg>
+        </button>
+      </div>
+
+      {revealed && (
+        <div style={{
+          background: 'var(--card)', border: '1px solid var(--border)',
+          borderRadius: '12px', overflow: 'hidden', marginTop: '8px',
+        }}>
+          {!unlocked ? (
+            <div style={{ padding: '16px 18px' }}>
+              <p style={{ margin: '0 0 10px', fontFamily: 'var(--font-ui)', fontSize: '0.88rem', color: 'var(--text-muted)' }}>
+                Contraseña de administrador
+              </p>
+              <div style={{ display: 'flex', gap: '8px' }}>
+                <input
+                  type="password"
+                  placeholder="Contraseña"
+                  value={secret}
+                  onChange={e => setSecret(e.target.value)}
+                  onKeyDown={e => e.key === 'Enter' && unlock()}
+                  style={inputStyle}
+                />
+                <button
+                  onClick={unlock}
+                  style={{
+                    padding: '10px 16px', borderRadius: '8px',
+                    background: 'var(--accent-warm)', color: '#fff',
+                    border: 'none', cursor: 'pointer',
+                    fontFamily: 'var(--font-ui)', fontSize: '0.88rem',
+                    fontWeight: '600', whiteSpace: 'nowrap' as const,
+                  }}
+                >
+                  Entrar
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div style={{ padding: '16px 18px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              <p style={{ margin: 0, fontFamily: 'var(--font-ui)', fontSize: '0.95rem', fontWeight: '600', color: 'var(--text)' }}>
+                Enviar notificación push
+              </p>
               <input
-                type="password"
-                placeholder="Contraseña"
-                value={secret}
-                onChange={e => setSecret(e.target.value)}
-                onKeyDown={e => e.key === 'Enter' && unlock()}
+                type="text"
+                placeholder="Título *"
+                value={title}
+                onChange={e => setTitle(e.target.value)}
                 style={inputStyle}
               />
+              <textarea
+                placeholder="Mensaje *"
+                value={body}
+                onChange={e => setBody(e.target.value)}
+                rows={3}
+                style={{ ...inputStyle, resize: 'vertical' as const }}
+              />
+              <input
+                type="text"
+                placeholder="URL (opcional, ej: /)"
+                value={url}
+                onChange={e => setUrl(e.target.value)}
+                style={inputStyle}
+              />
+              {status && (
+                <p style={{
+                  margin: 0, fontFamily: 'var(--font-ui)', fontSize: '0.83rem',
+                  color: status.ok ? '#6abf6a' : '#e07070',
+                  padding: '8px 12px', borderRadius: '8px',
+                  background: status.ok ? 'rgba(106,191,106,0.1)' : 'rgba(224,112,112,0.1)',
+                }}>
+                  {status.msg}
+                </p>
+              )}
               <button
-                onClick={unlock}
+                onClick={send}
+                disabled={sending || !title.trim() || !body.trim()}
                 style={{
-                  padding: '10px 16px', borderRadius: '8px',
-                  background: 'var(--accent-warm)', color: '#fff',
-                  border: 'none', cursor: 'pointer',
-                  fontFamily: 'var(--font-ui)', fontSize: '0.88rem',
-                  fontWeight: '600', whiteSpace: 'nowrap' as const,
+                  padding: '12px', borderRadius: '8px',
+                  background: sending || !title.trim() || !body.trim() ? 'var(--border)' : 'var(--accent-warm)',
+                  color: '#fff', border: 'none',
+                  cursor: sending || !title.trim() || !body.trim() ? 'not-allowed' : 'pointer',
+                  fontFamily: 'var(--font-ui)', fontSize: '0.92rem', fontWeight: '600',
+                  transition: 'background 0.2s',
                 }}
               >
-                Entrar
+                {sending ? 'Enviando…' : 'Enviar a todos los suscriptores'}
               </button>
             </div>
-          </div>
-        ) : (
-          <div style={{ padding: '16px 18px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            <p style={{ margin: 0, fontFamily: 'var(--font-ui)', fontSize: '0.95rem', fontWeight: '600', color: 'var(--text)' }}>
-              Enviar notificación push
-            </p>
-            <input
-              type="text"
-              placeholder="Título *"
-              value={title}
-              onChange={e => setTitle(e.target.value)}
-              style={inputStyle}
-            />
-            <textarea
-              placeholder="Mensaje *"
-              value={body}
-              onChange={e => setBody(e.target.value)}
-              rows={3}
-              style={{ ...inputStyle, resize: 'vertical' as const }}
-            />
-            <input
-              type="text"
-              placeholder="URL (opcional, ej: /)"
-              value={url}
-              onChange={e => setUrl(e.target.value)}
-              style={inputStyle}
-            />
-            {status && (
-              <p style={{
-                margin: 0, fontFamily: 'var(--font-ui)', fontSize: '0.83rem',
-                color: status.ok ? '#6abf6a' : '#e07070',
-                padding: '8px 12px', borderRadius: '8px',
-                background: status.ok ? 'rgba(106,191,106,0.1)' : 'rgba(224,112,112,0.1)',
-              }}>
-                {status.msg}
-              </p>
-            )}
-            <button
-              onClick={send}
-              disabled={sending || !title.trim() || !body.trim()}
-              style={{
-                padding: '12px', borderRadius: '8px',
-                background: sending || !title.trim() || !body.trim() ? 'var(--border)' : 'var(--accent-warm)',
-                color: '#fff', border: 'none',
-                cursor: sending || !title.trim() || !body.trim() ? 'not-allowed' : 'pointer',
-                fontFamily: 'var(--font-ui)', fontSize: '0.92rem', fontWeight: '600',
-                transition: 'background 0.2s',
-              }}
-            >
-              {sending ? 'Enviando…' : 'Enviar a todos los suscriptores'}
-            </button>
-          </div>
-        )}
-      </div>
+          )}
+        </div>
+      )}
     </section>
   )
 }
