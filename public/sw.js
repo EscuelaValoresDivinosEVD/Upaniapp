@@ -93,19 +93,50 @@ self.addEventListener('fetch', (event) => {
   }
 })
 
+// ── IndexedDB helper ─────────────────────────────────────────────────────
+function openNotifDB() {
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open('upani-notifs', 1)
+    req.onupgradeneeded = (e) => {
+      e.target.result.createObjectStore('notifications', { keyPath: 'id' })
+    }
+    req.onsuccess = () => resolve(req.result)
+    req.onerror = () => reject(req.error)
+  })
+}
+
+function saveNotif(data) {
+  return openNotifDB().then((db) => new Promise((resolve, reject) => {
+    const notif = {
+      id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
+      title: data.title ?? 'Upaninews',
+      body: data.body ?? '',
+      url: data.url ?? '/',
+      time: Date.now(),
+      read: false,
+    }
+    const tx = db.transaction('notifications', 'readwrite')
+    tx.objectStore('notifications').add(notif)
+    tx.oncomplete = () => resolve(notif)
+    tx.onerror = () => reject(tx.error)
+  }))
+}
+
 // ── Push notifications ────────────────────────────────────────────────────
 self.addEventListener('push', (event) => {
   const data = event.data?.json() ?? {}
-  const show = self.registration.showNotification(data.title ?? 'Upaninews', {
-    body: data.body ?? '',
-    icon: '/icons/icon-192.png',
-    badge: '/icons/icon-192.png',
-    data: { url: data.url ?? '/' },
-    vibrate: [100, 50, 100],
-  }).then(() => {
+  const work = saveNotif(data).then((notif) =>
+    self.registration.showNotification(notif.title, {
+      body: notif.body,
+      icon: '/icons/icon-192.png',
+      badge: '/icons/icon-192.png',
+      data: { id: notif.id, url: notif.url },
+      vibrate: [100, 50, 100],
+    })
+  ).then(() => {
     if ('setAppBadge' in navigator) return navigator.setAppBadge(1)
   })
-  event.waitUntil(show)
+  event.waitUntil(work)
 })
 
 self.addEventListener('notificationclick', (event) => {
