@@ -1,4 +1,5 @@
 import ThemeToggleHeader from '@/components/ThemeToggleHeader'
+import NotificationBell from '@/components/NotificationBell'
 import FeedList from '@/components/FeedList'
 
 export const dynamic = 'force-dynamic'
@@ -45,7 +46,10 @@ export default function HomePage() {
           <path className="lt1" d="M3320.56,403.76h-32.38l-76.86-184.52-77.65,184.52h-31.85l-101.34-205.58h26.32l91.34,186.37,78.18-186.37h30.27l77.92,186.37,91.34-186.37h24.48l-99.76,205.58Z"/>
           <path className="lt1" d="M3583.8,406.92c-90.55,0-131.35-22.64-139.78-68.44h25.53c6.58,35.01,44.22,46.86,115.29,46.86,74.76,0,100.55-15.79,100.55-38.7,0-34.48-55.54-37.38-112.4-41.06-60.02-3.95-121.61-8.69-121.61-52.12,0-31.85,31.59-58.7,121.61-58.7s123.46,29.48,131.88,61.86h-26.59c-7.63-22.9-40.01-40.01-106.61-40.01s-96.08,13.42-96.08,35.27c0,27.64,51.59,29.75,106.34,33.17,62.12,4.21,128.19,10.79,128.19,60.02,0,39.22-35.8,61.86-126.35,61.86Z"/>
         </svg>
-        <ThemeToggleHeader />
+        <div style={{ display: 'flex', alignItems: 'center', gap: '2px' }}>
+          <NotificationBell />
+          <ThemeToggleHeader />
+        </div>
       </header>
 
       <div style={{
