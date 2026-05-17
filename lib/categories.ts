@@ -7,9 +7,9 @@ export interface Category {
 export const CATEGORY_GROUPS = ['Mirada Interna', 'Tiempo Presente', 'Efemérides'] as const
 
 export const CATEGORIES: Category[] = [
-  { name: 'Editorial del Mes', slug: 'editorial-del-mes', group: 'Mirada Interna' },
+  { name: 'Editorial del Mes', slug: 'editorial', group: 'Mirada Interna' },
   { name: 'Voces del Gurú', slug: 'voces-del-guru', group: 'Mirada Interna' },
-  { name: 'Expedientes E.T.', slug: 'expedientes-et', group: 'Mirada Interna' },
+  { name: 'Expedientes E.T.', slug: 'expedientes-e-t', group: 'Mirada Interna' },
   { name: 'Punctum', slug: 'punctum', group: 'Mirada Interna' },
   { name: 'Autores Universales', slug: 'autores-universales', group: 'Tiempo Presente' },
   { name: 'Bienestar', slug: 'bienestar', group: 'Tiempo Presente' },
