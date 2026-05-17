@@ -121,11 +121,11 @@ function ProductCard({ product: p }: { product: Awaited<ReturnType<typeof getKio
         <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
           <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.95rem', fontWeight: '700', color: 'var(--accent-warm)' }}>
             {hasDiscount ? p.sale_price : p.price ? p.price : ''}
-            {(p.sale_price || p.price) ? ' €' : 'Gratis'}
+            {(p.sale_price || p.price) ? ' $' : 'Gratis'}
           </span>
           {hasDiscount && (
             <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.75rem', color: 'var(--text-muted)', textDecoration: 'line-through' }}>
-              {p.regular_price} €
+              {p.regular_price} $
             </span>
           )}
         </div>
