@@ -168,6 +168,56 @@ export default function SettingsPage() {
           </div>
         </section>
 
+        {/* Contacto */}
+        <section style={{ marginBottom: '32px' }}>
+          <p style={{
+            fontSize: '0.65rem', letterSpacing: '0.15em', textTransform: 'uppercase',
+            color: 'var(--text-muted)', fontFamily: 'var(--font-ui)',
+            margin: '0 0 10px 4px',
+          }}>
+            Soporte
+          </p>
+          <div style={{
+            background: 'var(--card)', border: '1px solid var(--border)',
+            borderRadius: '12px', overflow: 'hidden',
+          }}>
+            <Link
+              href="/contacto"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                padding: '16px 18px',
+                textDecoration: 'none',
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <div style={{
+                  width: '36px', height: '36px', borderRadius: '10px',
+                  background: 'rgba(206,158,240,0.15)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  flexShrink: 0,
+                }}>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
+                  </svg>
+                </div>
+                <div>
+                  <p style={{ margin: 0, fontFamily: 'var(--font-ui)', fontSize: '0.95rem', color: 'var(--text)', fontWeight: '500' }}>
+                    Contáctanos
+                  </p>
+                  <p style={{ margin: '2px 0 0', fontFamily: 'var(--font-ui)', fontSize: '0.78rem', color: 'var(--text-muted)' }}>
+                    Reportes, sugerencias y aportes
+                  </p>
+                </div>
+              </div>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M9 18l6-6-6-6" />
+              </svg>
+            </Link>
+          </div>
+        </section>
+
         {/* Admin — hidden, tap logo 5x to reveal */}
         <AdminSection />
 
