@@ -10,12 +10,21 @@ export default function ArticleLoader({ slug }: { slug: string }) {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    // Show saved content immediately — works offline
+    const saved = getSaved().find((a) => a.slug === slug)
+    if (saved) {
+      setItem({ ...saved, guid: saved.slug, creator: '' })
+      setLoading(false)
+      // Silently refresh from network if available
+      fetchFeedClient().then((items) => {
+        const fresh = items.find((i) => i.slug === slug)
+        if (fresh) setItem(fresh)
+      }).catch(() => {})
+      return
+    }
+
     fetchFeedClient().then((items) => {
-      let found: RssItem | null = items.find((i) => i.slug === slug) ?? null
-      if (!found) {
-        const saved = getSaved().find((a) => a.slug === slug)
-        if (saved) found = { ...saved, guid: saved.slug, creator: '' }
-      }
+      const found = items.find((i) => i.slug === slug) ?? null
       setItem(found)
       setLoading(false)
     })

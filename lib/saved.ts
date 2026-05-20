@@ -29,6 +29,7 @@ export function saveArticle(article: SavedArticle): void {
   list.unshift({ ...article, savedAt: Date.now() })
   localStorage.setItem(KEY, JSON.stringify(list))
   cacheImage(article.image)
+  cacheArticlePage(article.slug)
 }
 
 async function cacheImage(url?: string): Promise<void> {
@@ -37,6 +38,16 @@ async function cacheImage(url?: string): Promise<void> {
     const cache = await caches.open('upani-images-v1')
     if (!await cache.match(url)) await cache.add(url)
   } catch { /* ignore — cross-origin or network failure */ }
+}
+
+async function cacheArticlePage(slug: string): Promise<void> {
+  if (!('caches' in window)) return
+  try {
+    const cache = await caches.open('upani-shell-v4')
+    const url = `/article/${slug}`
+    const res = await fetch(url)
+    if (res.ok) await cache.put(url, res)
+  } catch { /* ignore — offline or network failure */ }
 }
 
 export function unsaveArticle(slug: string): void {
