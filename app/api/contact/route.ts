@@ -76,8 +76,9 @@ export async function POST(req: Request) {
     })
 
     if (error) {
-      console.error('Resend error:', error)
-      return Response.json({ ok: false, error: 'Error al enviar el correo' }, { status: 500 })
+      console.error('Resend error:', JSON.stringify(error))
+      const msg = (error as { message?: string }).message ?? 'Error al enviar el correo'
+      return Response.json({ ok: false, error: msg }, { status: 500 })
     }
 
     return Response.json({ ok: true })
