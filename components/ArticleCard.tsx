@@ -9,8 +9,21 @@ interface Props {
   compact?: boolean
 }
 
+const MONTHS = new Set(['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'])
+
+function sectionCats(categories: string[]): string[] {
+  const filtered = categories.filter((c) => {
+    const lower = c.toLowerCase()
+    if (MONTHS.has(lower)) return false
+    if (/^\d{1,2}-/.test(lower)) return false
+    return true
+  })
+  return filtered.length > 0 ? filtered : categories
+}
+
 export default function ArticleCard({ item, index = 0, compact = false }: Props) {
   const delay = Math.min(index * 60, 400)
+  const cats = sectionCats(item.categories)
 
   if (compact) {
     return (
@@ -44,7 +57,7 @@ export default function ArticleCard({ item, index = 0, compact = false }: Props)
             </div>
           )}
           <div style={{ padding: '10px 11px 12px', flex: 1, display: 'flex', flexDirection: 'column', gap: '5px' }}>
-            {item.categories[0] && (
+            {cats[0] && (
               <span style={{
                 fontSize: '0.6rem',
                 letterSpacing: '0.1em',
@@ -52,7 +65,7 @@ export default function ArticleCard({ item, index = 0, compact = false }: Props)
                 color: 'var(--orange)',
                 fontFamily: 'var(--font-ui)',
               }}>
-                {item.categories[0]}
+                {cats[0]}
               </span>
             )}
             <h3 style={{
@@ -114,9 +127,9 @@ export default function ArticleCard({ item, index = 0, compact = false }: Props)
         )}
 
         <div style={{ padding: '16px 18px 18px' }}>
-          {item.categories.length > 0 && (
+          {cats.length > 0 && (
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '10px' }}>
-              {item.categories.slice(0, 2).map((cat, i) => (
+              {cats.slice(0, 2).map((cat, i) => (
                 <span
                   key={cat}
                   style={{
