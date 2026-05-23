@@ -16,8 +16,8 @@ export default function SplashScreen() {
 
   useEffect(() => {
     if (!visible) return
-    // Fallback: hide after 6s if video doesn't play or is too long
-    const timer = setTimeout(hide, 6000)
+    // Fallback: hide after 3s if video doesn't play or is too long
+    const timer = setTimeout(hide, 3000)
     return () => clearTimeout(timer)
   }, [visible])
 
