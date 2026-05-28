@@ -7,6 +7,7 @@ import BottomNav from '@/components/BottomNav'
 import ServiceWorkerSetup from '@/components/ServiceWorkerSetup'
 import InstallPrompt from '@/components/InstallPrompt'
 import SplashScreen from '@/components/SplashScreen'
+import PWATracker from '@/components/PWATracker'
 
 const oswald = Oswald({
   subsets: ['latin'],
@@ -66,6 +67,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <ThemeProvider>
           <SplashScreen />
+          <PWATracker />
           <ServiceWorkerSetup />
           {children}
           <BottomNav />
