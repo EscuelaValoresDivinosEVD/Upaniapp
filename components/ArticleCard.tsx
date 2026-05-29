@@ -57,17 +57,32 @@ export default function ArticleCard({ item, index = 0, compact = false }: Props)
             </div>
           )}
           <div style={{ padding: '10px 11px 12px', flex: 1, display: 'flex', flexDirection: 'column', gap: '5px' }}>
-            {cats[0] && (
-              <span style={{
-                fontSize: '0.6rem',
-                letterSpacing: '0.1em',
-                textTransform: 'uppercase',
-                color: 'var(--orange)',
-                fontFamily: 'var(--font-ui)',
-              }}>
-                {cats[0]}
-              </span>
-            )}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '5px', flexWrap: 'wrap' }}>
+              {cats[0] && (
+                <span style={{
+                  fontSize: '0.6rem',
+                  letterSpacing: '0.1em',
+                  textTransform: 'uppercase',
+                  color: 'var(--orange)',
+                  fontFamily: 'var(--font-ui)',
+                }}>
+                  {cats[0]}
+                </span>
+              )}
+              {cats[0] && item.creator && (
+                <span style={{ fontSize: '0.6rem', color: 'var(--border)', fontFamily: 'var(--font-ui)' }}>·</span>
+              )}
+              {item.creator && (
+                <span style={{
+                  fontSize: '0.6rem',
+                  color: 'var(--text-muted)',
+                  fontFamily: 'var(--font-ui)',
+                  fontStyle: 'italic',
+                }}>
+                  {item.creator}
+                </span>
+              )}
+            </div>
             <h3 style={{
               fontFamily: 'var(--font-display)',
               fontSize: '0.88rem',
@@ -127,8 +142,8 @@ export default function ArticleCard({ item, index = 0, compact = false }: Props)
         )}
 
         <div style={{ padding: '16px 18px 18px' }}>
-          {cats.length > 0 && (
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '10px' }}>
+          {(cats.length > 0 || item.creator) && (
+            <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '6px', marginBottom: '10px' }}>
               {cats.slice(0, 2).map((cat, i) => (
                 <span
                   key={cat}
@@ -144,6 +159,19 @@ export default function ArticleCard({ item, index = 0, compact = false }: Props)
                   {cat}
                 </span>
               ))}
+              {cats.length > 0 && item.creator && (
+                <span style={{ color: 'var(--border)', fontSize: '0.68rem' }}>·</span>
+              )}
+              {item.creator && (
+                <span style={{
+                  fontSize: '0.68rem',
+                  color: 'var(--text-muted)',
+                  fontFamily: 'var(--font-ui)',
+                  fontStyle: 'italic',
+                }}>
+                  {item.creator}
+                </span>
+              )}
             </div>
           )}
 
