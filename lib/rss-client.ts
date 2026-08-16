@@ -5,7 +5,7 @@ export type { RssItem }
 export { formatDate }
 
 const TTL = 5 * 60 * 1000
-const WP_API = 'https://upaninews.com/wp-json/wp/v2'
+const WP_API = 'https://store.upaninews.com/wp-json/wp/v2'
 
 // Cache for the home feed (latest 100 posts)
 let homeCached: { items: RssItem[]; ts: number } | null = null

@@ -17,7 +17,7 @@ export async function getKioskoProducts(): Promise<WooProduct[]> {
   if (!key || !secret) return []
 
   const credentials = Buffer.from(`${key}:${secret}`).toString('base64')
-  const url = 'https://upaninews.com/wp-json/wc/v3/products?per_page=24&status=publish&orderby=date&order=desc'
+  const url = 'https://store.upaninews.com/wp-json/wc/v3/products?per_page=24&status=publish&orderby=date&order=desc'
 
   const res = await fetch(url, {
     headers: { Authorization: `Basic ${credentials}` },

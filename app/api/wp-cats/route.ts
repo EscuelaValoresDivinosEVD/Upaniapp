@@ -5,7 +5,7 @@ export async function GET(req: Request) {
   const auth = new URL(req.url).searchParams.get('secret')
   if (auth !== process.env.CRON_SECRET) return new Response('Unauthorized', { status: 401 })
 
-  const WP = 'https://upaninews.com/wp-json/wp/v2'
+  const WP = 'https://store.upaninews.com/wp-json/wp/v2'
   const headers = { Accept: 'application/json' }
 
   const [catRes, tagRes] = await Promise.all([
