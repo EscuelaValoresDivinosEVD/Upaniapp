@@ -19,7 +19,7 @@ export async function GET(req: Request) {
   // Try Basic Auth
   try {
     const credentials = Buffer.from(`${key}:${secret}`).toString('base64')
-    const url = 'https://upaninews.com/wp-json/wc/v3/products?per_page=3&status=publish'
+    const url = 'https://store.upaninews.com/wp-json/wc/v3/products?per_page=3&status=publish'
     const res = await fetch(url, {
       headers: { Authorization: `Basic ${credentials}` },
       cache: 'no-store',
@@ -39,7 +39,7 @@ export async function GET(req: Request) {
 
   // Try query params
   try {
-    const url = `https://upaninews.com/wp-json/wc/v3/products?per_page=3&status=publish&consumer_key=${key}&consumer_secret=${secret}`
+    const url = `https://store.upaninews.com/wp-json/wc/v3/products?per_page=3&status=publish&consumer_key=${key}&consumer_secret=${secret}`
     const res = await fetch(url, { cache: 'no-store' })
     results.query_params_status = res.status
     results.query_params_ok = res.ok

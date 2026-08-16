@@ -3,7 +3,7 @@ export const dynamic = 'force-dynamic'
 
 export async function GET() {
   try {
-    const res = await fetch('https://upaninews.com/feed/', {
+    const res = await fetch('https://store.upaninews.com/feed/', {
       headers: {
         'User-Agent': 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)',
         'Accept': 'application/rss+xml, application/xml, text/xml, */*',

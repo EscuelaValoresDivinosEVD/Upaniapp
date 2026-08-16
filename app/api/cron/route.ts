@@ -21,7 +21,7 @@ export async function GET(req: Request) {
 
   try {
     const res = await fetch(
-      'https://upaninews.com/wp-json/wp/v2/posts?per_page=1&_embed=true&orderby=date&order=desc'
+      'https://store.upaninews.com/wp-json/wp/v2/posts?per_page=1&_embed=true&orderby=date&order=desc'
     )
     if (!res.ok) return Response.json({ ok: false, error: 'fetch_failed' })
 

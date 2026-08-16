@@ -15,7 +15,7 @@ export interface RssItem {
 
 export async function fetchFeed(): Promise<RssItem[]> {
   try {
-    const res = await fetch('https://upaninews.com/feed/', {
+    const res = await fetch('https://store.upaninews.com/feed/', {
       next: { revalidate: 3600 },
       signal: AbortSignal.timeout(15000),
       headers: {
