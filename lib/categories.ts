@@ -37,6 +37,30 @@ export const CATEGORIES: Category[] = [
   { name: 'Diciembre', slug: 'diciembre', group: 'Efemérides' },
 ]
 
+/** Month categories WordPress files efemérides under (children of "Efemérides"). */
+const EFEMERIDES_MONTHS = new Set(
+  CATEGORIES.filter((c) => c.group === 'Efemérides').map((c) => c.name.toLowerCase())
+)
+
+/** Day tag WordPress pairs with the month, e.g. "18-agosto". */
+const DAY_TAG = /^\d{1,2}-/
+
+function isEfemerideTerm(name: string): boolean {
+  const lower = name.toLowerCase()
+  return EFEMERIDES_MONTHS.has(lower) || DAY_TAG.test(lower)
+}
+
+/** Efemérides are the daily almanac entries — they outnumber regular notes ~2:1. */
+export function isEfemeride(categories: string[]): boolean {
+  return categories.some(isEfemerideTerm)
+}
+
+/** Card labels, minus the month/day terms that otherwise read as a second date. */
+export function sectionCats(categories: string[]): string[] {
+  const filtered = categories.filter((c) => !isEfemerideTerm(c))
+  return filtered.length > 0 ? filtered : categories
+}
+
 export function categoryNameToSlug(name: string): string {
   return name
     .toLowerCase()

@@ -2,23 +2,12 @@
 
 import Link from 'next/link'
 import { RssItem, formatDate } from '@/lib/rss'
+import { sectionCats } from '@/lib/categories'
 
 interface Props {
   item: RssItem
   index?: number
   compact?: boolean
-}
-
-const MONTHS = new Set(['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'])
-
-function sectionCats(categories: string[]): string[] {
-  const filtered = categories.filter((c) => {
-    const lower = c.toLowerCase()
-    if (MONTHS.has(lower)) return false
-    if (/^\d{1,2}-/.test(lower)) return false
-    return true
-  })
-  return filtered.length > 0 ? filtered : categories
 }
 
 export default function ArticleCard({ item, index = 0, compact = false }: Props) {

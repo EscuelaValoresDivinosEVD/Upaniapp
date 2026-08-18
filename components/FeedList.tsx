@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback, useRef } from 'react'
 import Link from 'next/link'
 import { fetchFeedClient, fetchFeedByCategory, type RssItem } from '@/lib/rss-client'
+import { isEfemeride } from '@/lib/categories'
 import ArticleCard from './ArticleCard'
 
 interface Props {
@@ -207,8 +208,9 @@ export default function FeedList({ categorySlug }: Props) {
     )
   }
 
-  const featured = items.slice(0, 5)
-  const grid = items.slice(5)
+  // Efemérides are ~2/3 of the feed, so they run half-width while regular
+  // notes span the full row. Order stays chronological either way.
+  const cells = items.map((item) => ({ item, half: isEfemeride(item.categories) }))
 
   return (
     <>
@@ -264,27 +266,20 @@ export default function FeedList({ categorySlug }: Props) {
         </svg>
       </div>
 
-      <div>
-        {/* First 5 full width */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          {featured.map((item, i) => (
-            <ArticleCard key={item.guid || item.link} item={item} index={i} />
-          ))}
-        </div>
-
-        {/* Rest in 2-column grid */}
-        {grid.length > 0 && (
-          <>
-            <div style={{ textAlign: 'center', margin: '28px 0 20px', color: 'var(--border)', letterSpacing: '0.3em', fontSize: '0.9rem' }}>
-              ✦ ✦ ✦
-            </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-              {grid.map((item, i) => (
-                <ArticleCard key={item.guid || item.link} item={item} index={i + 5} compact />
-              ))}
-            </div>
-          </>
-        )}
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: '1fr 1fr',
+        columnGap: '12px',
+        rowGap: '16px',
+      }}>
+        {cells.map(({ item, half }, i) => (
+          <div
+            key={item.guid || item.link}
+            style={half ? undefined : { gridColumn: '1 / -1' }}
+          >
+            <ArticleCard item={item} index={i} compact={half} />
+          </div>
+        ))}
       </div>
     </>
   )
