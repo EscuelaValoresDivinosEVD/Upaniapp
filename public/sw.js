@@ -79,6 +79,11 @@ self.addEventListener('fetch', (event) => {
     return
   }
 
+  // ── API routes — always network, never cache ────────────────────────────
+  if (url.origin === self.location.origin && url.pathname.startsWith('/api/')) {
+    return // let the browser handle it normally
+  }
+
   // ── Same-origin assets (icons, manifest) — cache-first ──────────────────
   if (url.origin === self.location.origin) {
     event.respondWith(
