@@ -9,16 +9,19 @@ const TTL = 5 * 60 * 1000
 let homeCached: { items: RssItem[]; ts: number } | null = null
 const categoryCached = new Map<string, { items: RssItem[]; ts: number }>()
 
-export async function fetchFeedClient(): Promise<RssItem[]> {
-  if (homeCached && Date.now() - homeCached.ts < TTL) return homeCached.items
+export async function fetchFeedClient(): Promise<{ items: RssItem[]; error?: string }> {
+  if (homeCached && Date.now() - homeCached.ts < TTL) return { items: homeCached.items }
   try {
     const res = await fetch('/api/articles')
-    if (!res.ok) return []
+    if (!res.ok) {
+      const text = await res.text().catch(() => '')
+      return { items: [], error: `HTTP ${res.status}: ${text.slice(0, 120)}` }
+    }
     const items: RssItem[] = await res.json()
     homeCached = { items, ts: Date.now() }
-    return items
-  } catch {
-    return []
+    return { items }
+  } catch (e) {
+    return { items: [], error: String(e) }
   }
 }
 

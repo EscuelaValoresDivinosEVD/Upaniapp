@@ -16,14 +16,14 @@ export default function ArticleLoader({ slug }: { slug: string }) {
       setItem({ ...saved, guid: saved.slug, creator: '' })
       setLoading(false)
       // Silently refresh from network if available
-      fetchFeedClient().then((items) => {
+      fetchFeedClient().then(({ items }) => {
         const fresh = items.find((i) => i.slug === slug)
         if (fresh) setItem(fresh)
       }).catch(() => {})
       return
     }
 
-    fetchFeedClient().then((items) => {
+    fetchFeedClient().then(({ items }) => {
       const found = items.find((i) => i.slug === slug) ?? null
       setItem(found)
       setLoading(false)

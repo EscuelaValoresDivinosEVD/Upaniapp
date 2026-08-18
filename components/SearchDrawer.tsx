@@ -19,7 +19,7 @@ export default function SearchDrawer({ open, onClose }: Props) {
   useEffect(() => {
     if (open) {
       document.body.style.overflow = 'hidden'
-      fetchFeedClient().then(setAll)
+      fetchFeedClient().then(({ items }) => setAll(items))
       setTimeout(() => inputRef.current?.focus(), 350)
     } else {
       document.body.style.overflow = ''

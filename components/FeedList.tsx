@@ -16,6 +16,7 @@ export default function FeedList({ categorySlug }: Props) {
   const [items, setItems] = useState<RssItem[]>([])
   const [loading, setLoading] = useState(true)
   const [offline, setOffline] = useState(false)
+  const [fetchError, setFetchError] = useState<string | undefined>()
   const [pullDistance, setPullDistance] = useState(0)
   const [refreshing, setRefreshing] = useState(false)
 
@@ -25,9 +26,15 @@ export default function FeedList({ categorySlug }: Props) {
   useEffect(() => { refreshingRef.current = refreshing }, [refreshing])
 
   const doFetch = useCallback(() => {
-    const fetcher = categorySlug ? fetchFeedByCategory(categorySlug) : fetchFeedClient()
-    return fetcher.then((result) => {
+    if (categorySlug) {
+      return fetchFeedByCategory(categorySlug).then((result) => {
+        setOffline(result.length === 0 && !navigator.onLine)
+        setItems(result)
+      })
+    }
+    return fetchFeedClient().then(({ items: result, error }) => {
       setOffline(result.length === 0 && !navigator.onLine)
+      setFetchError(error)
       setItems(result)
     })
   }, [categorySlug])
@@ -177,9 +184,24 @@ export default function FeedList({ categorySlug }: Props) {
             </Link>
           </>
         ) : (
-          <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.1rem', color: 'var(--text-muted)' }}>
-            No hay entradas disponibles.
-          </p>
+          <>
+            <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.1rem', color: 'var(--text-muted)' }}>
+              No hay entradas disponibles.
+            </p>
+            {fetchError && (
+              <p style={{
+                fontFamily: 'var(--font-ui)',
+                fontSize: '0.72rem',
+                color: '#e07070',
+                maxWidth: '300px',
+                wordBreak: 'break-all',
+                lineHeight: '1.4',
+                margin: 0,
+              }}>
+                {fetchError}
+              </p>
+            )}
+          </>
         )}
       </div>
     )
