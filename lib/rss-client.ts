@@ -5,7 +5,7 @@ export type { RssItem }
 export { formatDate }
 
 const TTL = 5 * 60 * 1000
-const WP_API = 'https://store.upaninews.com/wp-json/wp/v2'
+const WP_PROXY = '/api/wp-posts'
 
 // Cache for the home feed (latest 100 posts)
 let homeCached: { items: RssItem[]; ts: number } | null = null
@@ -18,8 +18,7 @@ export async function fetchFeedClient(): Promise<RssItem[]> {
 
   try {
     const res = await fetch(
-      `${WP_API}/posts?per_page=100&_embed=true&orderby=date&order=desc`,
-      { headers: { Accept: 'application/json' } }
+      `${WP_PROXY}?path=posts&per_page=100&_embed=true&orderby=date&order=desc`
     )
     if (!res.ok) return []
     const posts: WpPost[] = await res.json()
@@ -38,8 +37,7 @@ export async function fetchFeedByCategory(categorySlug: string): Promise<RssItem
   try {
     // Step 1: resolve category slug → WP term ID
     const catRes = await fetch(
-      `${WP_API}/categories?slug=${encodeURIComponent(categorySlug)}&per_page=1`,
-      { headers: { Accept: 'application/json' } }
+      `${WP_PROXY}?path=categories&slug=${encodeURIComponent(categorySlug)}&per_page=1`
     )
     if (!catRes.ok) return []
     const cats: WpTerm[] = await catRes.json()
@@ -50,8 +48,7 @@ export async function fetchFeedByCategory(categorySlug: string): Promise<RssItem
 
     if (!termId) {
       const tagRes = await fetch(
-        `${WP_API}/tags?slug=${encodeURIComponent(categorySlug)}&per_page=1`,
-        { headers: { Accept: 'application/json' } }
+        `${WP_PROXY}?path=tags&slug=${encodeURIComponent(categorySlug)}&per_page=1`
       )
       if (tagRes.ok) {
         const tags: WpTerm[] = await tagRes.json()
@@ -64,8 +61,7 @@ export async function fetchFeedByCategory(categorySlug: string): Promise<RssItem
 
     // Step 2: fetch posts filtered by that term ID
     const postsRes = await fetch(
-      `${WP_API}/posts?${termType}=${termId}&per_page=100&_embed=true&orderby=date&order=desc`,
-      { headers: { Accept: 'application/json' } }
+      `${WP_PROXY}?path=posts&${termType}=${termId}&per_page=100&_embed=true&orderby=date&order=desc`
     )
     if (!postsRes.ok) return []
     const posts: WpPost[] = await postsRes.json()
