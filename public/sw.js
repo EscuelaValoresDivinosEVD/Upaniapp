@@ -1,5 +1,5 @@
-const SHELL = 'upani-shell-v4'
-const STATIC = 'upani-static-v4'
+const SHELL = 'upani-shell-v5'
+const STATIC = 'upani-static-v5'
 const IMAGES = 'upani-images-v1'
 
 const OFFLINE_HTML = `<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Upaninews</title><style>body{margin:0;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#2E0F2F;color:#F0E8FA;font-family:Georgia,serif;text-align:center;padding:24px}h1{font-size:1.4rem;margin-bottom:12px}p{font-size:.9rem;color:#7A5A9A;margin-bottom:28px}a{display:inline-block;padding:11px 28px;background:#CE9EF0;color:#2E0F2F;border-radius:8px;text-decoration:none;font-weight:700}</style></head><body><h1>Sin conexión</h1><p>Revisa tu internet e intenta de nuevo.</p><a href="/">Reintentar</a></body></html>`
