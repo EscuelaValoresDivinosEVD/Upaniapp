@@ -338,11 +338,40 @@ export default function ReaderClient({ slug, title, pubDate, categories, content
         </div>
       </header>
 
+      {/* Hero image — bleeds edge to edge and dissolves into the page below */}
+      {image && (
+        <div style={{
+          position: 'relative',
+          width: '100%',
+          height: 'clamp(200px, 44vh, 380px)',
+          overflow: 'hidden',
+        }}>
+          <img
+            src={image}
+            alt=""
+            fetchPriority="high"
+            style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+          />
+          <div
+            aria-hidden="true"
+            style={{
+              position: 'absolute',
+              inset: 0,
+              background: 'linear-gradient(to bottom, transparent 18%, var(--bg) 96%)',
+              pointerEvents: 'none',
+            }}
+          />
+        </div>
+      )}
+
       {/* Article */}
       <main style={{
+        position: 'relative',
         maxWidth: '680px',
         margin: '0 auto',
-        padding: '32px 20px 120px',
+        // Rise into the tail of the fade so the image melts into the text
+        marginTop: image ? '-56px' : undefined,
+        padding: image ? '0 20px 120px' : '32px 20px 120px',
       }}>
         {/* Categories */}
         {categories.length > 0 && (
