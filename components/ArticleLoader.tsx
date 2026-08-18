@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { fetchFeedClient, type RssItem } from '@/lib/rss-client'
+import { fetchArticleBySlug, type RssItem } from '@/lib/rss-client'
 import { getSaved } from '@/lib/saved'
 import ReaderClient from './ReaderClient'
 
@@ -16,15 +16,13 @@ export default function ArticleLoader({ slug }: { slug: string }) {
       setItem({ ...saved, guid: saved.slug, creator: '' })
       setLoading(false)
       // Silently refresh from network if available
-      fetchFeedClient().then(({ items }) => {
-        const fresh = items.find((i) => i.slug === slug)
+      fetchArticleBySlug(slug).then((fresh) => {
         if (fresh) setItem(fresh)
       }).catch(() => {})
       return
     }
 
-    fetchFeedClient().then(({ items }) => {
-      const found = items.find((i) => i.slug === slug) ?? null
+    fetchArticleBySlug(slug).then((found) => {
       setItem(found)
       setLoading(false)
     })
