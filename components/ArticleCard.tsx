@@ -7,18 +7,21 @@ import { sectionCats } from '@/lib/categories'
 interface Props {
   item: RssItem
   index?: number
-  compact?: boolean
+  /** 'row' is the compact horizontal strip used for efemérides. */
+  variant?: 'feature' | 'row'
 }
 
-export default function ArticleCard({ item, index = 0, compact = false }: Props) {
+export default function ArticleCard({ item, index = 0, variant = 'feature' }: Props) {
   const delay = Math.min(index * 60, 400)
   const cats = sectionCats(item.categories)
 
-  if (compact) {
+  if (variant === 'row') {
+    // No category label here: efemérides are filed under their own month, so it
+    // would just restate the date sitting right below it.
     return (
       <Link
         href={`/article/${item.slug}`}
-        style={{ display: 'block', textDecoration: 'none', animationDelay: `${delay}ms`, height: '100%' }}
+        style={{ display: 'block', textDecoration: 'none', animationDelay: `${delay}ms` }}
         className="animate-fade-in"
       >
         <article
@@ -27,67 +30,59 @@ export default function ArticleCard({ item, index = 0, compact = false }: Props)
             border: '1px solid var(--border)',
             borderRadius: '8px',
             overflow: 'hidden',
-            height: '100%',
             display: 'flex',
-            flexDirection: 'column',
+            alignItems: 'stretch',
+            gap: '11px',
+            padding: '9px',
             transition: 'transform 0.2s ease',
           }}
           onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)' }}
           onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)' }}
         >
           {item.image && (
-            <div style={{ aspectRatio: '4/3', overflow: 'hidden', flexShrink: 0 }}>
+            <div style={{
+              width: '62px',
+              height: '62px',
+              flexShrink: 0,
+              borderRadius: '6px',
+              overflow: 'hidden',
+            }}>
               <img
                 src={item.image}
-                alt={item.title}
+                alt=""
                 style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
                 loading="lazy"
               />
             </div>
           )}
-          <div style={{ padding: '10px 11px 12px', flex: 1, display: 'flex', flexDirection: 'column', gap: '5px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '5px', flexWrap: 'wrap' }}>
-              {cats[0] && (
-                <span style={{
-                  fontSize: '0.6rem',
-                  letterSpacing: '0.1em',
-                  textTransform: 'uppercase',
-                  color: 'var(--orange)',
-                  fontFamily: 'var(--font-ui)',
-                }}>
-                  {cats[0]}
-                </span>
-              )}
-              {cats[0] && item.creator && (
-                <span style={{ fontSize: '0.6rem', color: 'var(--border)', fontFamily: 'var(--font-ui)' }}>·</span>
-              )}
-              {item.creator && (
-                <span style={{
-                  fontSize: '0.6rem',
-                  color: 'var(--text-muted)',
-                  fontFamily: 'var(--font-ui)',
-                  fontStyle: 'italic',
-                }}>
-                  {item.creator}
-                </span>
-              )}
-            </div>
+          <div style={{
+            flex: 1,
+            minWidth: 0,
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            gap: '4px',
+          }}>
             <h3 style={{
               fontFamily: 'var(--font-display)',
-              fontSize: '0.88rem',
+              fontSize: '0.84rem',
               fontWeight: '700',
-              lineHeight: '1.3',
+              lineHeight: '1.28',
               color: 'var(--text)',
               margin: 0,
-              flex: 1,
               display: '-webkit-box',
-              WebkitLineClamp: 4,
+              WebkitLineClamp: 2,
               WebkitBoxOrient: 'vertical',
               overflow: 'hidden',
             }}>
               {item.title}
             </h3>
-            <time style={{ fontSize: '0.65rem', color: 'var(--text-muted)', fontFamily: 'var(--font-ui)', fontStyle: 'italic' }}>
+            <time style={{
+              fontSize: '0.63rem',
+              color: 'var(--text-muted)',
+              fontFamily: 'var(--font-ui)',
+              fontStyle: 'italic',
+            }}>
               {formatDate(item.pubDate)}
             </time>
           </div>

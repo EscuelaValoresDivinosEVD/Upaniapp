@@ -208,9 +208,9 @@ export default function FeedList({ categorySlug }: Props) {
     )
   }
 
-  // Efemérides are ~2/3 of the feed, so they run half-width while regular
-  // notes span the full row. Order stays chronological either way.
-  const cells = items.map((item) => ({ item, half: isEfemeride(item.categories) }))
+  // Efemérides are ~2/3 of the feed, so they collapse to compact horizontal
+  // strips while regular notes keep the full card. Order stays chronological.
+  const cells = items.map((item) => ({ item, row: isEfemeride(item.categories) }))
 
   return (
     <>
@@ -266,18 +266,11 @@ export default function FeedList({ categorySlug }: Props) {
         </svg>
       </div>
 
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: '1fr 1fr',
-        columnGap: '12px',
-        rowGap: '16px',
-      }}>
-        {cells.map(({ item, half }, i) => (
-          <div
-            key={item.guid || item.link}
-            style={half ? undefined : { gridColumn: '1 / -1' }}
-          >
-            <ArticleCard item={item} index={i} compact={half} />
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+        {cells.map(({ item, row }, i) => (
+          // Efemérides sit tight together; full cards get room to breathe.
+          <div key={item.guid || item.link} style={row ? undefined : { margin: '8px 0' }}>
+            <ArticleCard item={item} index={i} variant={row ? 'row' : 'feature'} />
           </div>
         ))}
       </div>
